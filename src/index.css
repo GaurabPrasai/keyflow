@@ -1,102 +1,351 @@
 @import "tailwindcss";
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+:root {
+  /* Light theme */
+  --bg-color: #fafafa;
+  --text-color: #2d2d2d;
+  --text-muted: #6b7280;
+  --correct-color: #10b981;
+  --incorrect-color: #ef4444;
+  --cursor-color: #3b82f6;
+  --icon-color: #6b7280;
+  --accent-bg: rgba(59, 130, 246, 0.05);
+  --border-subtle: #e5e7eb;
 }
 
-@layer base {
-  * {
-  }
+[data-theme="dark"] {
+  --bg-color: #0a0a0a;
+  --text-color: #e4e4e7;
+  --text-muted: #71717a;
+  --correct-color: #22c55e;
+  --incorrect-color: #ef4444;
+  --cursor-color: #60a5fa;
+  --icon-color: #71717a;
+  --accent-bg: rgba(96, 165, 250, 0.08);
+  --border-subtle: #27272a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  transition: all 0.4s ease;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-bottom: 40px;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  color: var(--icon-color);
+  transition: color 0.3s ease;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--cursor-color);
+  transition: all 0.3s ease;
+}
+
+.typing-container {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.text-display {
+  font-size: 2rem;
+  line-height: 1.8;
+  text-align: center;
+  word-wrap: break-word;
+  position: relative;
+  padding: 40px 0;
+  font-weight: 300;
+}
+
+.text-display::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, var(--bg-color));
+  pointer-events: none;
+}
+
+.char {
+  position: relative;
+  transition: all 0.15s ease;
+  border-radius: 2px;
+}
+
+.char.correct {
+  color: var(--correct-color);
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.char.incorrect {
+  color: var(--incorrect-color);
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+.char.current {
+  background-color: var(--cursor-color);
+  color: var(--bg-color);
+  animation: cursor-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes cursor-pulse {
+
+  0%,
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  51%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+}
+
+.input-field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: transparent;
+  caret-color: transparent;
+  pointer-events: none;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: var(--icon-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.control-btn:hover {
+  color: var(--cursor-color);
+  background-color: var(--accent-bg);
+  transform: translateY(-2px);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--icon-color);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+  border-color: var(--cursor-color);
+  color: var(--cursor-color);
+  transform: rotate(180deg) scale(1.05);
+}
+
+.progress-indicator {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: var(--border-subtle);
+  border-radius: 1px;
   overflow: hidden;
 }
+
+.progress-bar {
+  height: 100%;
+  background: var(--cursor-color);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+.game-status {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-status.visible {
+  opacity: 1;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  body {
+    padding: 30px 15px;
+  }
+
+  .title {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+  }
+
+  .stats {
+    gap: 40px;
+    margin-bottom: 15px;
+  }
+
+  .stat-icon {
+    font-size: 1.3rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .text-display {
+    font-size: 1.6rem;
+    line-height: 1.7;
+    padding: 30px 0;
+  }
+
+  .input-field {
+    font-size: 1.6rem;
+  }
+
+  .controls {
+    gap: 25px;
+  }
+
+  .control-btn {
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    right: 20px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    gap: 30px;
+  }
+
+  .text-display {
+    font-size: 1.4rem;
+    padding: 25px 0;
+  }
+
+  .text-display::after {
+    height: 60px;
+  }
+
+  .input-field {
+    font-size: 1.4rem;
+  }
+}
+
+/* Focus states for accessibility */
+.control-btn:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--cursor-color);
+  outline-offset: 2px;
+}
+
+/* Smooth theme transition */
+* {
+  transition: background-color 0.4s ease, color 0.4s ease,
+    border-color 0.4s ease;
 }
