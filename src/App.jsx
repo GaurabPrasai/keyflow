@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Header from './components/Header'
+import TypingBox from './components/TypingBox'
+
 function App() {
 
   return (
     <>
     <Navbar />
-    <Header />
+    <div className="container">
+      <Header />
+      <TypingBox />
+    </div>
+    
     </>
   )
 }
