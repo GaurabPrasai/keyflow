@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const useTyping = () => {
     const [isTyping, setIsTyping] = useState(false);
@@ -8,24 +8,39 @@ const useTyping = () => {
     const [charStatus, setCharStatus] = useState([]);
 
     const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-        setCurrentIndex(e.target.value.length);
+
+        const newValue = e.target.value;
 
         if (!isTyping) {
             setIsTyping(true);
         }
 
-        let updateStatus = [''];
-        for (let i = 0; i < currentIndex; i++) {
-            if (targetText[i] === inputValue.length) {
-                updateStatus.push("correct");
+        setInputValue(newValue);
+        setCurrentIndex(newValue.length);
 
+        let updateStatus = [];
+
+        // loop over the text to determine its status
+        for (let index = 0; index < targetText.length; index++) {
+
+            // check if user has typed the character or not
+            if (index < newValue.length) {
+
+                // determine wheather the typed character is correct or not
+                if (newValue[index] === targetText[index]) {
+                    updateStatus.push("correct");
+                }
+                else {
+                    updateStatus.push("incorrect");
+                }
+            }
+            else if (index === newValue.length) {
+                updateStatus.push("current");
             }
             else {
-                updateStatus.push("incorrect");
+                updateStatus.push("not yet typed");
             }
         }
-
         setCharStatus(updateStatus);
     }
 

@@ -1,22 +1,46 @@
 import useTyping from "../hooks/useTyping";
 
 const TypingBox = () => {
-
-  const{ inputValue, isTyping, targetText, handleInputChange, charStatus } = useTyping();
+  const {
+    isTyping,
+    inputValue,
+    currentIndex,
+    targetText,
+    handleInputChange,
+    charStatus,
+  } = useTyping();
 
   return (
     <div className="typing-container">
       <div className="text-display" id="textDisplay">
-        {targetText}
+        {targetText.split("").map((char, index) => {
+          const status = charStatus[index];
+          return (
+            <span
+              key={index}
+              className={
+                status === "correct"
+                  ? "correct"
+                  : status === "incorrect"
+                  ? "incorrect"
+                  : ""
+              }
+            >
+              {char}
+            </span>
+          );
+        })}
       </div>
       <input
         type="text"
         className="input-field"
         id="inputField"
-        autocomplete="off"
-        autocorrect="off"
-        autocapitalize="off"
-        spellcheck="false"
+        onChange={handleInputChange}
+        value={inputValue}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
         aria-label="Type the text above"
       />
 
