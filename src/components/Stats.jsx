@@ -3,15 +3,15 @@ const Stats = () => {
     <div className="stats">
       <div className="stat">
         <div className="stat-icon">⚡</div>
-        <span className="stat-value">wpm</span>
+        <span className="stat-value">56</span>
       </div>
       <div className="stat">
         <div className="stat-icon">🎯</div>
-        <span className="stat-value">accuracy</span>
+        <span className="stat-value">76%</span>
       </div>
       <div className="stat">
         <div className="stat-icon">⏱️</div>
-        <span className="stat-value">timer</span>
+        <span className="stat-value">60</span>
       </div>
     </div>
   )
