@@ -4,7 +4,7 @@ const useTyping = () => {
     const [isTyping, setIsTyping] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [targetText, setTargetText] = useState("the quick brown fox jumps over the lazy dog");
+    const [targetText, setTargetText] = useState("i had all and then most of you, some and now none of you take me back to the night we met, i don't know what i'm supposed to do, haunted by the ghost of you take me back to the night we met.");
     const [charStatus, setCharStatus] = useState([]);
 
     const handleInputChange = (e) => {
