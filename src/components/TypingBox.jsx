@@ -1,9 +1,13 @@
+import useTyping from "../hooks/useTyping";
+
 const TypingBox = () => {
+
+  const{ inputValue, isTyping, targetText, handleInputChange, charStatus } = useTyping();
+
   return (
     <div className="typing-container">
       <div className="text-display" id="textDisplay">
-        Minimalism is not about having less. It is about making room for what
-        matters most. Focus on the essentials, eliminate the unnecessary.
+        {targetText}
       </div>
       <input
         type="text"
