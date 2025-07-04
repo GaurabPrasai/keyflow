@@ -2,6 +2,7 @@
   "name": "keyflow",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://gaurabprasai.github.io/keyflow",
   "type": "module",
   "scripts": {
     "dev": "vite",
