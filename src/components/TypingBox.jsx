@@ -18,15 +18,17 @@ const TypingBox = () => {
           return (
             <span
               key={index}
-              className={
+              className={`char ${
                 status === "correct"
                   ? "correct"
                   : status === "incorrect"
                   ? "incorrect"
+                  : status === "current"
+                  ? "current"
                   : ""
-              }
+              }`}
             >
-              {char}
+              {char === " " ? "\u00A0" : char}
             </span>
           );
         })}

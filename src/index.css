@@ -127,17 +127,17 @@ body {
   border-radius: 2px;
 }
 
-.correct {
+.char.correct {
   color: var(--correct-color);
   background-color: rgba(16, 185, 129, 0.1);
 }
 
-.incorrect {
+.char.incorrect {
   color: var(--incorrect-color);
   background-color: rgba(239, 68, 68, 0.15);
 }
 
-.current {
+.char.current {
   background-color: var(--cursor-color);
   color: var(--bg-color);
   animation: cursor-pulse 1.2s ease-in-out infinite;
