@@ -13,10 +13,9 @@ const TypingBox = () => {
   return (
     <div className="typing-container">
       <div className="text-display" id="textDisplay">
-        {targetText.split(" ").map((char, index) => {
+        {targetText.split("").map((char, index) => {
           const status = charStatus[index];
           return (
-          <>
             <span
               key={index}
               className={`char ${
@@ -31,9 +30,6 @@ const TypingBox = () => {
             >
               {char === " " ? "\u00A0" : char}
             </span>
-            <span>&nbsp;</span>
-
-          </>
           );
         })}
       </div>
