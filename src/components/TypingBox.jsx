@@ -8,30 +8,41 @@ const TypingBox = () => {
     targetText,
     handleInputChange,
     charStatus,
+    processedWords,
   } = useTyping();
 
   return (
     <div className="typing-container">
       <div className="text-display" id="textDisplay">
-        {targetText.split("").map((char, index) => {
-          const status = charStatus[index];
-          return (
-            <span
-              key={index}
-              className={`char ${
-                status === "correct"
-                  ? "correct"
-                  : status === "incorrect"
-                  ? "incorrect"
-                  : status === "current"
-                  ? "current"
-                  : ""
-              }`}
-            >
-              {char === " " ? "\u00A0" : char}
-            </span>
-          );
-        })}
+        {(() => {
+          let index = 0;
+          return processedWords.map((wordObj, wordIndex) => {
+            return (
+              <span key={wordIndex} className="word">
+                {wordObj.characters.map((char, charIndex) => {
+                  const status = charStatus[index];
+                  index++; // Increment for next character
+                  return (
+                    <span
+                      key={charIndex}
+                      className={`char ${
+                        status === "correct"
+                          ? "correct"
+                          : status === "incorrect"
+                          ? "incorrect"
+                          : status === "current"
+                          ? "current"
+                          : ""
+                      }`}
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  );
+                })}
+              </span>
+            );
+          });
+        })()}
       </div>
       <input
         type="text"
