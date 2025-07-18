@@ -9,11 +9,18 @@ const TypingBox = () => {
     handleInputChange,
     charStatus,
     processedWords,
+    currentLine,
   } = useTyping();
 
   return (
     <div className="typing-container">
-      <div className="text-display" id="textDisplay">
+      <div
+        className="text-display"
+        id="textDisplay"
+        style={{
+          transform: `translateY(-${currentLine * 1.5}em)`, // same as line-height
+        }}
+      >
         {(() => {
           let index = 0;
           return processedWords.map((wordObj, wordIndex) => {
