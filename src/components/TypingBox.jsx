@@ -1,17 +1,19 @@
 import useTyping from "../hooks/useTyping";
+import useText from "../hooks/useTexts";
 
 const TypingBox = () => {
+  const targetText = useText("english-200");
+
   const {
     isTyping,
     inputValue,
     currentIndex,
-    targetText,
     handleInputChange,
     charStatus,
     processedWords,
     currentLine,
     progress,
-  } = useTyping();
+  } = useTyping(targetText);
 
   return (
     <div className="typing-wrapper">
