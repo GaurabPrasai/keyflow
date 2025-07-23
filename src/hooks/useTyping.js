@@ -52,8 +52,10 @@ const useTyping = (targetText) => {
 
         let updateStatus = [];
 
-        // loop over the text to determine its status
-        for (let index = 0; index < targetText.length; index++) {
+        // loop over the visible text(text that have been typed + 1) to determine its status
+        const visibleLength = newValue.length + 1;
+        
+        for (let index = 0; index < visibleLength; index++) {
 
             // check if user has typed the character or not
             if (index < newValue.length) {

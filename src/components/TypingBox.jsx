@@ -33,6 +33,11 @@ const TypingBox = () => {
                   {wordObj.characters.map((char, charIndex) => {
                     const status = charStatus[index];
                     index++; // Increment for next character
+
+                    if (index > currentIndex + 150) {
+                      return null; // skip far-away characters(ONLY OF THE BOTTOM)
+                    }
+
                     return (
                       <span
                         key={charIndex}
@@ -68,13 +73,13 @@ const TypingBox = () => {
           aria-label="Type the text above"
         />
       </div>
-      
+
       {/* Progress bar moved outside the typing-container */}
       <div className="progress-indicator">
-        <div 
-          className="progress-bar" 
+        <div
+          className="progress-bar"
           id="progressBar"
-          style={{ width: `${progress || 0}%` }}
+          style={{ width: `${progress || 10}%` }}
         ></div>
       </div>
     </div>
