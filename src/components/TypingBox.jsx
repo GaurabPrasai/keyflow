@@ -52,6 +52,7 @@ const TypingBox = ({ typingData }) => {
                       </span>
                     );
                   })}
+                  
                 </span>
               );
             });
@@ -68,6 +69,7 @@ const TypingBox = ({ typingData }) => {
           autoCapitalize="off"
           spellCheck="false"
           aria-label="Type the text above"
+          autoFocus
         />
       </div>
 

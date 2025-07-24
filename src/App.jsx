@@ -10,13 +10,11 @@ function App() {
   const { text: targetText, shuffleText } = useText("english-200");
 
   const typingData = useTyping(targetText);
-  
+
   const handleNewText = () => {
     shuffleText();
     typingData.resetTyping();
   };
-
-  
 
   const {
     isTyping,

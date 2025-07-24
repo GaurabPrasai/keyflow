@@ -37,6 +37,11 @@ const useTyping = (targetText) => {
 
         }
         setProcessedWords(result);
+
+        if (isTyping === false) {
+            setCharStatus(["current"]);
+        }
+        
     }, [targetText])
 
     const handleInputChange = (e) => {
