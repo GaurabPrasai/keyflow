@@ -7,9 +7,16 @@ import useText from "./hooks/useTexts";
 import useTyping from "./hooks/useTyping";
 
 function App() {
-  const targetText = useText("english-200");
+  const { text: targetText, shuffleText } = useText("english-200");
 
   const typingData = useTyping(targetText);
+  
+  const handleNewText = () => {
+    shuffleText();
+    typingData.resetTyping();
+  };
+
+  
 
   const {
     isTyping,
@@ -20,7 +27,6 @@ function App() {
     processedWords,
     currentLine,
     resetTyping,
-    
   } = typingData;
 
   return (
@@ -29,7 +35,7 @@ function App() {
       <div className="container">
         <Header />
         <TypingBox typingData={typingData} />
-        <Controls typingData={typingData} targetText={targetText} />
+        <Controls typingData={typingData} targetText={targetText} handleRefresh={handleNewText} />
         <Status />
       </div>
     </>

@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 
-const Controls = ({ typingData, targetText }) => {
+const Controls = ({ typingData, targetText, handleRefresh }) => {
 
   const { resetTyping } = typingData;
 
@@ -10,10 +10,10 @@ const Controls = ({ typingData, targetText }) => {
 
   return (
     <div className="controls">
-      <button className="control-btn" id="resetBtn" aria-label="Reset test" onClick={handleReset}>
+      <button className="control-btn" id="resetBtn" aria-label="Reset test" onClick={handleRefresh}>
         <Icon icon="solar:restart-bold" width="22" height="22" />
       </button>
-      <button className="control-btn" id="newTextBtn" aria-label="New text">
+      <button className="control-btn" id="newTextBtn" aria-label="New text" onClick={handleReset}>
         <Icon icon="tdesign:refresh" width="20" height="20" />
       </button>
       <button className="control-btn" id="settingsBtn" aria-label="Settings">
