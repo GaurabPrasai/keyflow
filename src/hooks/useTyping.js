@@ -7,7 +7,7 @@ const useTyping = (targetText) => {
     const [charStatus, setCharStatus] = useState([]);
     const [processedWords, setProcessedWords] = useState([]);
     const [currentLine, setCurrentLine] = useState(null);
-    
+
     const charPerLine = 51;
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const useTyping = (targetText) => {
 
         // loop over the visible text(text that have been typed + 1) to determine its status
         const visibleLength = newValue.length + 1;
-        
+
         for (let index = 0; index < visibleLength; index++) {
 
             // check if user has typed the character or not
@@ -78,6 +78,14 @@ const useTyping = (targetText) => {
         setCharStatus(updateStatus);
     }
 
+    // reset button functionality
+    const resetTyping = () => {
+        setInputValue("");
+        setCharStatus([]);
+        setIsTyping(false);
+        setCurrentIndex(0);
+    };
+
 
     return {
         isTyping,
@@ -88,6 +96,7 @@ const useTyping = (targetText) => {
         charStatus,
         processedWords,
         currentLine,
+        resetTyping,
     };
 };
 

@@ -1,8 +1,4 @@
-import useTyping from "../hooks/useTyping";
-import useText from "../hooks/useTexts";
-
-const TypingBox = () => {
-  const targetText = useText("english-200");
+const TypingBox = ({ typingData }) => {
 
   const {
     isTyping,
@@ -13,7 +9,8 @@ const TypingBox = () => {
     processedWords,
     currentLine,
     progress,
-  } = useTyping(targetText);
+    
+  } = typingData;
 
   return (
     <div className="typing-wrapper">
