@@ -5,6 +5,7 @@ import Controls from "./components/Controls";
 import Status from "./components/Status";
 import useText from "./hooks/useTexts";
 import useTyping from "./hooks/useTyping";
+import SettingsModal from "./components/Settings";
 
 function App() {
   const { text: targetText, shuffleText } = useText("english-200");
@@ -35,6 +36,7 @@ function App() {
         <TypingBox typingData={typingData} />
         <Controls typingData={typingData} targetText={targetText} handleRefresh={handleNewText} />
         <Status />
+        <SettingsModal />
       </div>
     </>
   );
