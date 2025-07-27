@@ -12,29 +12,13 @@ function App() {
 
   const typingData = useTyping(targetText);
 
-  const handleNewText = () => {
-    shuffleText();
-    typingData.resetTyping();
-  };
-
-  const {
-    isTyping,
-    inputValue,
-    currentIndex,
-    handleInputChange,
-    charStatus,
-    processedWords,
-    currentLine,
-    resetTyping,
-  } = typingData;
-
   return (
     <>
       <Navbar />
       <div className="container">
         <Header />
         <TypingBox typingData={typingData} />
-        <Controls typingData={typingData} targetText={targetText} handleRefresh={handleNewText} />
+        <Controls typingData={typingData} targetText={targetText} shuffleText={shuffleText} />
         <Status />
         <SettingsModal />
       </div>

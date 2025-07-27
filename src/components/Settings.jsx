@@ -1,6 +1,19 @@
+import { useState } from "react";
 import "../styles/settings.css";
 
 const SettingsModal = () => {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  if(!isOpen)
+  {
+    return null;
+  }
+
+  function onClose(){
+    return null;
+  }
+
   return (
     <div className="modal-overlay" id="settingsModal">
       <div className="modal">
@@ -10,6 +23,7 @@ const SettingsModal = () => {
             className="modal-close"
             id="closeModal"
             aria-label="Close settings"
+            onClick={onClose}
           >
             ×
           </button>
