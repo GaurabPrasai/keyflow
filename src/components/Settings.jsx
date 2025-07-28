@@ -1,21 +1,52 @@
-import { useState } from "react";
 import "../styles/settings.css";
 
-const SettingsModal = () => {
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  if(!isOpen)
-  {
+const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
+  if (!isOpen) {
     return null;
   }
+  const resetSetting = () => {
+    setSettings({
+      cursorColor: "#3b82f6",
+    });
+  };
 
-  function onClose(){
-    return null;
+  function onClose() {
+    return setIsOpen(false);
   }
+
+  const colorOptions = [
+    "#3b82f6", // Blue (default)
+    "#10b981", // Green
+    "#f59e0b", // Yellow
+    "#ef4444", // Red
+    "#8b5cf6", // Purple
+    "#ec4899", // Pink
+  ];
+
+  const updateSetting = (key, value) => {
+    setSettings((prevSettings) => ({
+      ...prevSettings,
+      [key]: value,
+    }));
+  };
+
+  const handleColorSelect = (color) => {
+    updateSetting("cursorColor", color);
+  };
+
+  // Handle overlay click to close modal
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   return (
-    <div className="modal-overlay" id="settingsModal">
+    <div
+      className="modal-overlay"
+      id="settingsModal"
+      onClick={handleOverlayClick}
+    >
       <div className="modal">
         <div className="modal-header">
           <h2 className="modal-title">Customization</h2>
@@ -65,41 +96,43 @@ const SettingsModal = () => {
           </div>
 
           <div className="setting-group">
+            <label className="setting-label" htmlFor="textDataset">
+              Text Dataset
+            </label>
+            <div className="setting-description">
+              Choose the type of words you want to practice with
+            </div>
+            <select className="setting-select" id="textDataset">
+              <option value="english-200" selected>
+                English 200 (Most Common)
+              </option>
+              <option value="english-1k">English 1K (Top 1000 Words)</option>
+              <option value="english-5k">English 5K (Top 5000 Words)</option>
+              <option value="commonly-misspelled">
+                Commonly Misspelled Words
+              </option>
+              <option value="programming">Programming Keywords</option>
+              <option value="numbers">Numbers & Symbols</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
             <label className="setting-label">Cursor Color</label>
             <div className="setting-description">
               Choose your preferred cursor color
             </div>
             <div className="color-options">
-              <div
-                className="color-option selected"
-                data-color="#3b82f6"
-                style={{ background: "#3b82f6" }}
-              ></div>
-              <div
-                className="color-option"
-                data-color="#10b981"
-                style={{ background: "#10b981" }}
-              ></div>
-              <div
-                className="color-option"
-                data-color="#f59e0b"
-                style={{ background: "#f59e0b" }}
-              ></div>
-              <div
-                className="color-option"
-                data-color="#ef4444"
-                style={{ background: "#ef4444" }}
-              ></div>
-              <div
-                className="color-option"
-                data-color="#8b5cf6"
-                style={{ background: "#8b5cf6" }}
-              ></div>
-              <div
-                className="color-option"
-                data-color="#ec4899"
-                style={{ background: "#ec4899" }}
-              ></div>
+              {colorOptions.map((color) => (
+                <div
+                  key={color}
+                  className={`color-option ${
+                    settings?.cursorColor === color ? "selected" : ""
+                  }`}
+                  data-color="#3b82f6"
+                  style={{ background: color }}
+                  onClick={() => handleColorSelect(color)}
+                ></div>
+              ))}
             </div>
           </div>
 
@@ -116,10 +149,10 @@ const SettingsModal = () => {
         </div>
 
         <div className="modal-actions">
-          <button className="btn btn-secondary" id="resetSettings">
+          <button className="btn btn-secondary" id="resetSettings" onClick={resetSetting}>
             Reset to Default
           </button>
-          <button className="btn btn-primary" id="saveSettings">
+          <button className="btn btn-primary" id="saveSettings" onClick={onClose}>
             Save Changes
           </button>
         </div>

@@ -1,8 +1,11 @@
 import { Icon } from "@iconify/react";
+import { TextDataContext } from "../contexts/TextDataContext";
+import { useContext } from "react";
 
-const Controls = ({ typingData, shuffleText }) => {
-  
-  const { resetTyping } = typingData;
+const Controls = ({ setIsSettingOpen }) => {
+  const typingData = useContext(TextDataContext);
+
+  const { resetTyping, shuffleText } = typingData;
 
   const handleRefresh = () => {
     shuffleText();
@@ -11,6 +14,10 @@ const Controls = ({ typingData, shuffleText }) => {
 
   const handleReset = () => {
     resetTyping();
+  };
+
+  const openSetting = () => {
+    setIsSettingOpen(true);
   };
 
   return (
@@ -31,7 +38,7 @@ const Controls = ({ typingData, shuffleText }) => {
       >
         <Icon icon="tdesign:refresh" width="20" height="20" />
       </button>
-      <button className="control-btn" id="settingsBtn" aria-label="Settings">
+      <button className="control-btn" id="settingsBtn" aria-label="Settings" onClick={openSetting}>
         <Icon icon="uil:setting" width="20" height="20" />
       </button>
     </div>

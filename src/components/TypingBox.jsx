@@ -1,4 +1,8 @@
-const TypingBox = ({ typingData }) => {
+import { useContext } from "react";
+import { TextDataContext } from "../contexts/TextDataContext";
+
+const TypingBox = () => {
+  const typingData = useContext(TextDataContext);
 
   const {
     isTyping,
@@ -9,7 +13,6 @@ const TypingBox = ({ typingData }) => {
     processedWords,
     currentLine,
     progress,
-    
   } = typingData;
 
   return (
@@ -52,7 +55,6 @@ const TypingBox = ({ typingData }) => {
                       </span>
                     );
                   })}
-                  
                 </span>
               );
             });
