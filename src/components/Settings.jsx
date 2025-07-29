@@ -4,9 +4,11 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
   if (!isOpen) {
     return null;
   }
+  
   const resetSetting = () => {
     setSettings({
       cursorColor: "#3b82f6",
+      textDataset: "english-200",
     });
   };
 
@@ -23,6 +25,13 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
     "#ec4899", // Pink
   ];
 
+  const datasetOptions = [
+    { value: "english-200", label: "English 200 (Most Common)" },
+    { value: "english-1k", label: "English 1K (Top 1000 Words)" },
+    { value: "english-5k", label: "English 5K (Top 5000 Words)" },
+    { value: "commonly-misspelled", label: "Commonly Misspelled Words" }
+  ];
+
   const updateSetting = (key, value) => {
     setSettings((prevSettings) => ({
       ...prevSettings,
@@ -32,6 +41,10 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
 
   const handleColorSelect = (color) => {
     updateSetting("cursorColor", color);
+  };
+
+  const handleDatasetChange = (e) => {
+    updateSetting("textDataset", e.target.value);
   };
 
   // Handle overlay click to close modal
@@ -70,7 +83,7 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
             <select className="setting-select" id="timerDuration">
               <option value="15">15 seconds</option>
               <option value="30">30 seconds</option>
-              <option value="60" selected>
+              <option value="60" defaultValue>
                 60 seconds
               </option>
               <option value="120">2 minutes</option>
@@ -88,7 +101,7 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
             <select className="setting-select" id="fontSize">
               <option value="1.4">Small (1.4rem)</option>
               <option value="1.6">Medium (1.6rem)</option>
-              <option value="2" selected>
+              <option value="2" defaultValue>
                 Large (2rem)
               </option>
               <option value="2.4">Extra Large (2.4rem)</option>
@@ -102,17 +115,17 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
             <div className="setting-description">
               Choose the type of words you want to practice with
             </div>
-            <select className="setting-select" id="textDataset">
-              <option value="english-200" selected>
-                English 200 (Most Common)
-              </option>
-              <option value="english-1k">English 1K (Top 1000 Words)</option>
-              <option value="english-5k">English 5K (Top 5000 Words)</option>
-              <option value="commonly-misspelled">
-                Commonly Misspelled Words
-              </option>
-              <option value="programming">Programming Keywords</option>
-              <option value="numbers">Numbers & Symbols</option>
+            <select 
+              className="setting-select" 
+              id="textDataset"
+              value={settings.textDataset}
+              onChange={handleDatasetChange}
+            >
+              {datasetOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -4,9 +4,9 @@ import useTyping from "../hooks/useTyping";
 
 export const TextDataContext = createContext();
 
-const TextProvider = ({ children }) => {
+const TextProvider = ({ children, textDataset = "english-200" }) => {
 
-  const { text: targetText, shuffleText } = useText("english-200");
+  const { text: targetText, shuffleText } = useText(textDataset);
   const typingData = useTyping(targetText);
 
   const contextValue = {

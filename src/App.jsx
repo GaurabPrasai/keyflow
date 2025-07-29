@@ -12,6 +12,8 @@ function App() {
   
   const [settings, setSettings] = useState({
     cursorColor: "#3b82f6",
+    textDataset: "english-200",
+
   });
 
   useEffect(() => {
@@ -20,7 +22,7 @@ function App() {
 
   return (
     <>
-      <TextProvider>
+      <TextProvider textDataset={settings.textDataset}>
         <Navbar />
         <div className="container">
           <Header />
