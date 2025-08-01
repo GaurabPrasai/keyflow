@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const useTyping = (targetText) => {
     const [isTyping, setIsTyping] = useState(false);
@@ -7,13 +7,6 @@ const useTyping = (targetText) => {
     const [charStatus, setCharStatus] = useState([]);
     const [processedWords, setProcessedWords] = useState([]);
     const [currentLine, setCurrentLine] = useState(null);
-
-    const charPerLine = 51;
-
-    useEffect(() => {
-        let newCurrentLine = Math.floor(currentIndex / charPerLine);
-        setCurrentLine(newCurrentLine);
-    }, [currentIndex])
 
     useEffect(() => {
         let words = targetText.split(" ");
@@ -41,7 +34,7 @@ const useTyping = (targetText) => {
         if (isTyping === false) {
             setCharStatus(["current"]);
         }
-        
+
     }, [targetText])
 
     const handleInputChange = (e) => {
@@ -101,6 +94,7 @@ const useTyping = (targetText) => {
         charStatus,
         processedWords,
         currentLine,
+        setCurrentLine,
         resetTyping,
     };
 };

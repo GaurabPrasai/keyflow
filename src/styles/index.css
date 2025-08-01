@@ -98,17 +98,20 @@ body {
 .typing-wrapper {
   position: relative;
   margin-bottom: 50px;
+  contain: layout;
+  isolation: isolate;
 }
 
 .typing-container {
   position: relative;
-  height: calc(1.5rem * 9.5);
+  height: calc(1.7rem * 8);
   overflow: hidden;
+  contain: layout;
 }
 
 .text-display {
   font-size: 2rem;
-  line-height: 1.8;
+  line-height: 1.7;
   text-align: center;
   word-wrap: break-word;
   position: relative;
@@ -116,7 +119,15 @@ body {
   font-weight: 300;
   white-space: normal;
   scroll-behavior: smooth;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.2s ease-out;
+  contain: layout style paint;
+  /* Comprehensive containment */
+  will-change: transform;
+  /* Hint for GPU acceleration */
+  backface-visibility: hidden;
+  /* Prevent flicker during transforms */
+  transform-style: preserve-3d;
+  /* Hardware acceleration */
 }
 
 /* Top fade effect */
@@ -152,8 +163,8 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: linear-gradient(var(--bg-color) 0%, transparent 100%);
+  height: 80px;
+  background: linear-gradient(var(--bg-color) 20%, transparent 100%);
   pointer-events: none;
   z-index: 10;
 }
@@ -164,8 +175,8 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: linear-gradient(transparent 0%, var(--bg-color) 100%);
+  height: 80px;
+  background: linear-gradient(transparent 0%, var(--bg-color) 80%);
   pointer-events: none;
   z-index: 10;
 }
@@ -199,12 +210,16 @@ body {
 
 .word {
   white-space: nowrap;
+  display: inline;
+  margin-right: 0.01em;
 }
 
 .char {
   position: relative;
   transition: all 0.15s ease;
   border-radius: 2px;
+  display: inline;
+  contain: paint;
 }
 
 .char.correct {
@@ -220,6 +235,15 @@ body {
   color: var(--bg-color);
   animation: cursor-pulse 1.2s ease-in-out infinite;
 }
+
+/* Optimize animations and transitions */
+.char.correct,
+.char.incorrect,
+.char.current {
+  /* Use transform instead of changing other properties for animations */
+  transition: background-color 0.1s ease;
+}
+
 
 @keyframes cursor-pulse {
 
@@ -238,6 +262,7 @@ body {
 
 .input-field {
   position: absolute;
+  opacity: 0;
   top: 0;
   left: 0;
   width: 100%;
@@ -250,7 +275,13 @@ body {
   caret-color: transparent;
   /* pointer-events: none; */
   z-index: 1;
+  contain: layout style;
+  /* Disable expensive text rendering features */
+  text-rendering: optimizeSpeed;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
 }
+
 
 
 .controls {
@@ -332,6 +363,10 @@ body {
   width: 0%;
   transition: width 0.3s ease;
   border-radius: 1px;
+  will-change: width;
+  /* Hint for GPU acceleration */
+  transition: width 0.2s ease-out;
+  contain: layout style;
 }
 
 /* Mobile responsiveness for progress bar */
@@ -463,6 +498,15 @@ body {
 .theme-toggle:focus-visible {
   outline: 2px solid var(--cursor-color);
   outline-offset: 2px;
+}
+
+/* Optimize for large datasets */
+@media (min-width: 1024px) {
+  .text-display {
+    /* Enable subpixel rendering optimizations on larger screens */
+    transform: translateZ(0);
+    /* Force hardware acceleration */
+  }
 }
 
 /* Smooth theme transition */
