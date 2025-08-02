@@ -1,7 +1,8 @@
-import { useRef, useContext, useEffect, useCallback } from "react";
+import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { TextDataContext } from "../contexts/TextDataContext";
 
 const TypingBox = () => {
+  const [currentLine, setCurrentLine] = useState(null);
   const typingData = useContext(TextDataContext);
   const currentCharRef = useRef(null);
   const textDisplayRef = useRef(null);
@@ -14,8 +15,6 @@ const TypingBox = () => {
     handleInputChange,
     charStatus,
     processedWords,
-    currentLine,
-    setCurrentLine,
     progress,
   } = typingData;
 
@@ -184,7 +183,7 @@ const TypingBox = () => {
         <div
           className="progress-bar"
           id="progressBar"
-          style={{ width: `${progress || 10}%` }}
+          style={{ width: `${progress || 50}%` }}
         ></div>
       </div>
     </div>

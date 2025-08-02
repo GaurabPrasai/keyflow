@@ -73,23 +73,6 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
           </button>
         </div>
         <div className="modal-content">
-          <div className="setting-group">
-            <label className="setting-label" htmlFor="timerDuration">
-              Test Duration
-            </label>
-            <div className="setting-description">
-              Choose how long the typing test should last
-            </div>
-            <select className="setting-select" id="timerDuration">
-              <option value="15">15 seconds</option>
-              <option value="30">30 seconds</option>
-              <option value="60" defaultValue>
-                60 seconds
-              </option>
-              <option value="120">2 minutes</option>
-              <option value="300">5 minutes</option>
-            </select>
-          </div>
 
           <div className="setting-group">
             <label className="setting-label" htmlFor="fontSize">

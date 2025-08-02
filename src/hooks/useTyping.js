@@ -6,7 +6,6 @@ const useTyping = (targetText) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [charStatus, setCharStatus] = useState([]);
     const [processedWords, setProcessedWords] = useState([]);
-    const [currentLine, setCurrentLine] = useState(null);
 
     useEffect(() => {
         let words = targetText.split(" ");
@@ -84,7 +83,6 @@ const useTyping = (targetText) => {
         setCurrentIndex(0);
     };
 
-
     return {
         isTyping,
         inputValue,
@@ -93,8 +91,6 @@ const useTyping = (targetText) => {
         handleInputChange,
         charStatus,
         processedWords,
-        currentLine,
-        setCurrentLine,
         resetTyping,
     };
 };

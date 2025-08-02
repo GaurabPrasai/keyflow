@@ -38,7 +38,11 @@ const useText = (dataset) => {
 
         // Initial shuffle
         const shuffled = shuffleArray(allTexts);
-        setText(shuffled.join(" "));
+
+        // Load only 100 text 
+        const newShuffled = shuffled.slice(0, 10);
+
+        setText(newShuffled.join(" "));
       } catch (error) {
         console.error(`Failed to load dataset: ${dataset}`, error);
         if (isMounted) {
