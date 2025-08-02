@@ -44,10 +44,10 @@ const TypingBox = () => {
     const charBottom = charRect.bottom;
 
     // Calculate the center of the container
-    const containerCenter = containerTop + containerHeight / 2;
+    // const containerCenter = containerTop + containerHeight / 2;
 
     // Check if character is outside the visible area or too close to edges
-    const buffer = 60; // Buffer zone from top/bottom edges
+    const buffer = 40; // Buffer zone from top/bottom edges
     const shouldScroll =
       charTop < containerTop + buffer || charBottom > containerBottom - buffer;
 
@@ -78,7 +78,7 @@ const TypingBox = () => {
       // Apply smooth transform
       textDisplay.style.transform = `translateY(${newTranslateY}rem)`;
 
-      // Update current line for reference (optional)
+      // Update current line for reference
       const lineHeight = 1.8; // rem
       const newLine = Math.max(
         0,
@@ -134,7 +134,7 @@ const TypingBox = () => {
                     const currentIdx = index;
                     index++;
 
-                    // For far-ahead characters, render but hide them to maintain layout
+                    // Stop rendering far-ahead bottom characters
                     if (currentIdx > currentIndex + 200) {
                       return null;
                     }
@@ -180,7 +180,6 @@ const TypingBox = () => {
         />
       </div>
 
-      {/* Progress bar moved outside the typing-container */}
       <div className="progress-indicator">
         <div
           className="progress-bar"
