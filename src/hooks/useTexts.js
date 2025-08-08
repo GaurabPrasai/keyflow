@@ -4,6 +4,12 @@ const useText = (dataset) => {
   const [text, setText] = useState("");
   const [originalWords, setOriginalWords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
+  const [loadedChunks, setLoadedChunks] = useState([]);
+  const [shuffledWords, setShuffledWords] = useState([]);
+
+  const CHUNK_SIZE = 100;
+  const LOAD_THRESHOLD = 0.8; // Load next chunk when 80% through current text
 
   // Optimized shuffle function with better performance for large arrays
   const shuffleArray = useCallback((array) => {
@@ -16,15 +22,69 @@ const useText = (dataset) => {
     return shuffled;
   }, []);
 
+  // Load next chunk of words
+  const loadNextChunk = useCallback(() => {
+    if (shuffledWords.length === 0) return;
+
+    const startIndex = currentChunkIndex * CHUNK_SIZE;
+    const endIndex = Math.min(startIndex + CHUNK_SIZE, shuffledWords.length);
+
+    // If we've reached the end, reshuffle and start over
+    if (startIndex >= shuffledWords.length) {
+      const newShuffled = shuffleArray(originalWords);
+      setShuffledWords(newShuffled);
+      setCurrentChunkIndex(0);
+      setLoadedChunks([newShuffled.slice(0, CHUNK_SIZE)]);
+      setText(newShuffled.slice(0, CHUNK_SIZE).join(" "));
+      return;
+    }
+
+    const newChunk = shuffledWords.slice(startIndex, endIndex);
+    const updatedChunks = [...loadedChunks, newChunk];
+
+    setLoadedChunks(updatedChunks);
+
+    // Combine all loaded chunks into one text string
+    const combinedText = updatedChunks.flat().join(" ");
+    setText(combinedText);
+
+    setCurrentChunkIndex(prev => prev + 1);
+  }, [shuffledWords, currentChunkIndex, loadedChunks, originalWords, shuffleArray]);
+
+  // Check if we need to load the next chunk based on typing progress
+  const checkAndLoadNext = useCallback((typingProgress) => {
+    if (typingProgress >= LOAD_THRESHOLD && loadedChunks.length > 0) {
+      const currentTextLength = loadedChunks.flat().join(" ").length;
+      const progressPosition = typingProgress * currentTextLength;
+
+      // Calculate how much of the current chunks we've typed
+      const chunksCompleted = Math.floor(progressPosition / (CHUNK_SIZE * 6)); // Assuming average word length of 6 chars
+
+      // If we're near the end of loaded chunks, load more
+      if (chunksCompleted >= loadedChunks.length - 1) {
+        loadNextChunk();
+      }
+    }
+  }, [loadedChunks, loadNextChunk]);
+
   const shuffleText = useCallback(() => {
     if (originalWords.length > 0) {
-      const shuffled = shuffleArray(originalWords);
-      setText(shuffled.join(" "));
+      const newShuffled = shuffleArray(originalWords);
+      setShuffledWords(newShuffled);
+      setCurrentChunkIndex(0);
+      setLoadedChunks([]);
+
+      // Load initial chunk
+      const initialChunk = newShuffled.slice(0, CHUNK_SIZE);
+      setLoadedChunks([initialChunk]);
+      setText(initialChunk.join(" "));
+      setCurrentChunkIndex(1);
     }
   }, [originalWords, shuffleArray]);
 
+  // Initialize text loading
   useEffect(() => {
-    let isMounted = true; // Prevent state update if component unmounts
+    let isMounted = true;
 
     async function loadText() {
       setIsLoading(true);
@@ -32,17 +92,19 @@ const useText = (dataset) => {
         const module = await import(`../assets/texts/${dataset}.json`);
         const allTexts = module.default;
 
-        if (!isMounted) return; // Component unmounted, don't update state
+        if (!isMounted) return;
 
         setOriginalWords(allTexts);
 
-        // Initial shuffle
+        // Initial shuffle and setup
         const shuffled = shuffleArray(allTexts);
+        setShuffledWords(shuffled);
 
-        // Load only 100 text 
-        const newShuffled = shuffled.slice(0, 10);
-
-        setText(newShuffled.join(" "));
+        // Load first chunk
+        const initialChunk = shuffled.slice(0, CHUNK_SIZE);
+        setLoadedChunks([initialChunk]);
+        setText(initialChunk.join(" "));
+        setCurrentChunkIndex(1);
       } catch (error) {
         console.error(`Failed to load dataset: ${dataset}`, error);
         if (isMounted) {
@@ -57,13 +119,20 @@ const useText = (dataset) => {
 
     loadText();
 
-    // Cleanup function
     return () => {
       isMounted = false;
     };
   }, [dataset, shuffleArray]);
 
-  return { text, shuffleText, isLoading };
+  return {
+    text,
+    shuffleText,
+    isLoading,
+    loadNextChunk,
+    checkAndLoadNext,
+    currentChunkIndex,
+    totalLoadedWords: loadedChunks.flat().length
+  };
 };
 
 export default useText;
