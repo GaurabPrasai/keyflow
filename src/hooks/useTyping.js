@@ -1,12 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext, useMemo, useRef } from "react";
+import { SettingsContext } from "../contexts/SettingsContext";
 
 const useTyping = (targetText, checkAndLoadNext) => {
+    const { settings } = useContext(SettingsContext);
     const [isTyping, setIsTyping] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [charStatus, setCharStatus] = useState([]);
     const [processedWords, setProcessedWords] = useState([]);
     const [progress, setProgress] = useState(0);
+
+    // Create audio objects only once using useMemo
+    const audioSounds = useMemo(() => ({
+        correct: new Audio('src/assets/sounds/click_sound.wav'),
+        incorrect: new Audio('src/assets/sounds/error_sound.wav')
+    }), []);
 
     // Process words whenever target text changes
     useEffect(() => {
@@ -40,6 +48,7 @@ const useTyping = (targetText, checkAndLoadNext) => {
 
     const handleInputChange = (e) => {
         const newValue = e.target.value;
+        const previousLength = inputValue.length;
 
         if (!isTyping) {
             setIsTyping(true);
@@ -48,19 +57,36 @@ const useTyping = (targetText, checkAndLoadNext) => {
         setInputValue(newValue);
         setCurrentIndex(newValue.length);
 
-        let updateStatus = [];
-
         // Calculate progress
         const currentProgress = targetText.length > 0 ? newValue.length / targetText.length : 0;
         setProgress(currentProgress);
 
         // Check if we need to load next chunk
-        if (checkAndLoadNext && currentProgress > 0.7) { // Start loading when 70% complete
+        if (checkAndLoadNext && currentProgress > 0.7) {
             checkAndLoadNext(currentProgress);
+        }
+
+        // Handle audio for new character only
+        if (newValue.length > previousLength && settings?.soundEnabled) {
+            const newCharIndex = previousLength;
+            const isCorrect = newValue[newCharIndex] === targetText[newCharIndex];
+
+            try {
+                if (isCorrect) {
+                    audioSounds.correct.currentTime = 0; // Reset to start for rapid typing
+                    audioSounds.correct.play().catch(e => console.log('Audio play failed:', e));
+                } else {
+                    audioSounds.incorrect.currentTime = 0; // Reset to start for rapid typing
+                    audioSounds.incorrect.play().catch(e => console.log('Audio play failed:', e));
+                }
+            } catch (error) {
+                console.log('Audio error:', error);
+            }
         }
 
         // Loop over the visible text to determine its status
         const visibleLength = newValue.length + 1;
+        let updateStatus = [];
 
         for (let index = 0; index < visibleLength; index++) {
             // Check if user has typed the character or not

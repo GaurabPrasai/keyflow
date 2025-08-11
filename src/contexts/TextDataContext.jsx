@@ -1,20 +1,23 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
+import { SettingsContext } from "./SettingsContext";
 import useText from "../hooks/useTexts";
 import useTyping from "../hooks/useTyping";
 
 export const TextDataContext = createContext();
 
-const TextProvider = ({ children, textDataset }) => {
-  const { 
-    text: targetText, 
-    shuffleText, 
-    isLoading, 
-    loadNextChunk, 
+const TextProvider = ({ children }) => {
+  const { settings } = useContext(SettingsContext);
+
+  const {
+    text: targetText,
+    shuffleText,
+    isLoading,
+    loadNextChunk,
     checkAndLoadNext,
     currentChunkIndex,
-    totalLoadedWords
-  } = useText(textDataset);
-  
+    totalLoadedWords,
+  } = useText(settings.textDataset);
+
   const typingData = useTyping(targetText, checkAndLoadNext);
 
   const contextValue = {

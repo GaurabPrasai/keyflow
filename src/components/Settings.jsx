@@ -1,14 +1,20 @@
+import { useContext } from "react";
+import { SettingsContext } from "../contexts/SettingsContext";
 import "../styles/settings.css";
 
-const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
+const SettingsModal = ({ isOpen, setIsOpen }) => {
+
+  const { settings, setSettings } = useContext(SettingsContext);
+
   if (!isOpen) {
     return null;
   }
-  
+
   const resetSetting = () => {
     setSettings({
       cursorColor: "#3b82f6",
       textDataset: "english-200",
+      soundEnabled: true,
     });
   };
 
@@ -29,7 +35,7 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
     { value: "english-200", label: "English 200 (Most Common)" },
     { value: "english-1k", label: "English 1K (Top 1000 Words)" },
     { value: "english-5k", label: "English 5K (Top 5000 Words)" },
-    { value: "commonly-misspelled", label: "Commonly Misspelled Words" }
+    { value: "commonly-misspelled", label: "Commonly Misspelled Words" },
   ];
 
   const updateSetting = (key, value) => {
@@ -45,6 +51,10 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
 
   const handleDatasetChange = (e) => {
     updateSetting("textDataset", e.target.value);
+  };
+
+  const handleSoundState = (bool) => {
+    updateSetting("soundEnabled", bool);
   };
 
   // Handle overlay click to close modal
@@ -73,7 +83,6 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
           </button>
         </div>
         <div className="modal-content">
-
           <div className="setting-group">
             <label className="setting-label" htmlFor="fontSize">
               Font Size
@@ -98,8 +107,8 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
             <div className="setting-description">
               Choose the type of words you want to practice with
             </div>
-            <select 
-              className="setting-select" 
+            <select
+              className="setting-select"
               id="textDataset"
               value={settings.textDataset}
               onChange={handleDatasetChange}
@@ -138,17 +147,33 @@ const SettingsModal = ({ isOpen, setIsOpen, settings, setSettings }) => {
               Enable typing sound feedback
             </div>
             <div className="checkbox-group">
-              <div className="checkbox" data-setting="sounds"></div>
+              <div
+                className={`checkbox ${
+                  settings?.soundEnabled == true ? "checked" : ""
+                }`}
+                data-setting="sounds"
+                onClick={() => settings?.soundEnabled == true ? handleSoundState(false) : handleSoundState(true)}
+              >
+                {" "}
+              </div>
               <label className="checkbox-label">Enable typing sounds</label>
             </div>
           </div>
         </div>
 
         <div className="modal-actions">
-          <button className="btn btn-secondary" id="resetSettings" onClick={resetSetting}>
+          <button
+            className="btn btn-secondary"
+            id="resetSettings"
+            onClick={resetSetting}
+          >
             Reset to Default
           </button>
-          <button className="btn btn-primary" id="saveSettings" onClick={onClose}>
+          <button
+            className="btn btn-primary"
+            id="saveSettings"
+            onClick={onClose}
+          >
             Save Changes
           </button>
         </div>
