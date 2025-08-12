@@ -3,7 +3,6 @@ import { SettingsContext } from "../contexts/SettingsContext";
 import "../styles/settings.css";
 
 const SettingsModal = ({ isOpen, setIsOpen }) => {
-
   const { settings, setSettings } = useContext(SettingsContext);
 
   if (!isOpen) {
@@ -15,6 +14,7 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
       cursorColor: "#3b82f6",
       textDataset: "english-200",
       soundEnabled: true,
+      fontSize: "2rem",
     });
   };
 
@@ -38,11 +38,18 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
     { value: "commonly-misspelled", label: "Commonly Misspelled Words" },
   ];
 
+  const fontSizeOptions = [
+    { value: "1.6rem", label: "Small" },
+    { value: "2rem", label: "Medium" },
+    { value: "2.4rem", label: "Large" },
+  ];
+
   const updateSetting = (key, value) => {
     setSettings((prevSettings) => ({
       ...prevSettings,
       [key]: value,
     }));
+    
   };
 
   const handleColorSelect = (color) => {
@@ -55,6 +62,10 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
 
   const handleSoundState = (bool) => {
     updateSetting("soundEnabled", bool);
+  };
+
+  const handlefontSize = (e) => {
+    updateSetting("fontSize", e.target.value);
   };
 
   // Handle overlay click to close modal
@@ -90,13 +101,17 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
             <div className="setting-description">
               Adjust the text size for better readability
             </div>
-            <select className="setting-select" id="fontSize">
-              <option value="1.4">Small (1.4rem)</option>
-              <option value="1.6">Medium (1.6rem)</option>
-              <option value="2" defaultValue>
-                Large (2rem)
-              </option>
-              <option value="2.4">Extra Large (2.4rem)</option>
+            <select
+              className="setting-select"
+              id="fontSize"
+              value={settings.fontSize}
+              onChange={handlefontSize}
+            >
+              {fontSizeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -152,7 +167,11 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
                   settings?.soundEnabled == true ? "checked" : ""
                 }`}
                 data-setting="sounds"
-                onClick={() => settings?.soundEnabled == true ? handleSoundState(false) : handleSoundState(true)}
+                onClick={() =>
+                  settings?.soundEnabled == true
+                    ? handleSoundState(false)
+                    : handleSoundState(true)
+                }
               >
                 {" "}
               </div>

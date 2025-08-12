@@ -11,6 +11,7 @@
   --icon-color: #6b7280;
   --accent-bg: rgba(59, 130, 246, 0.05);
   --border-subtle: #e5e7eb;
+  --typing-font-size: 2rem;
 
   /* Dark theme */
   --d-bg-color: #0a0a0a;
@@ -110,7 +111,7 @@ body {
 }
 
 .text-display {
-  font-size: 2rem;
+  font-size: var(--typing-font-size);
   line-height: 1.7;
   text-align: center;
   word-wrap: break-word;

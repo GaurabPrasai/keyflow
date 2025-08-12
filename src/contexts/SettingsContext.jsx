@@ -7,6 +7,7 @@ export const SettingsProvider = ({ children }) => {
     cursorColor: "#3b82f6",
     textDataset: "english-200",
     soundEnabled: true,
+    fontSize: "2rem",
   });
 
   useEffect(() => {
@@ -15,6 +16,13 @@ export const SettingsProvider = ({ children }) => {
       settings.cursorColor
     );
   }, [settings.cursorColor]);
+  
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--typing-font-size",
+      settings.fontSize
+    );
+  }, [settings.fontSize]);
 
   return (
     <SettingsContext.Provider value={{ settings, setSettings }}>
