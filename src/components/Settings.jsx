@@ -3,32 +3,35 @@ import { SettingsContext } from "../contexts/SettingsContext";
 import "../styles/settings.css";
 
 const SettingsModal = ({ isOpen, setIsOpen }) => {
-  const { settings, setSettings } = useContext(SettingsContext);
+  const {
+    tempSettings,
+    updateTempSetting,
+    saveSettings,
+    resetToDefaults,
+    cancelChanges,
+  } = useContext(SettingsContext);
 
-  if (!isOpen) {
-    return null;
-  }
-
-  const resetSetting = () => {
-    setSettings({
-      cursorColor: "#3b82f6",
-      textDataset: "english-200",
-      soundEnabled: true,
-      fontSize: "2rem",
-    });
+  const handleReset = () => {
+    resetToDefaults();
   };
 
-  function onClose() {
-    return setIsOpen(false);
-  }
+  const handleSave = () => {
+    saveSettings();
+    setIsOpen(false);
+  };
+
+  const handleCancel = () => {
+    cancelChanges();
+    setIsOpen(false);
+  };
 
   const colorOptions = [
-    "#3b82f6", // Blue (default)
-    "#10b981", // Green
-    "#f59e0b", // Yellow
-    "#ef4444", // Red
-    "#8b5cf6", // Purple
-    "#ec4899", // Pink
+    "#3b82f6",
+    "#10b981",
+    "#f59e0b",
+    "#ef4444",
+    "#8b5cf6",
+    "#ec4899",
   ];
 
   const datasetOptions = [
@@ -44,36 +47,13 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
     { value: "2.4rem", label: "Large" },
   ];
 
-  const updateSetting = (key, value) => {
-    setSettings((prevSettings) => ({
-      ...prevSettings,
-      [key]: value,
-    }));
-    
-  };
-
-  const handleColorSelect = (color) => {
-    updateSetting("cursorColor", color);
-  };
-
-  const handleDatasetChange = (e) => {
-    updateSetting("textDataset", e.target.value);
-  };
-
-  const handleSoundState = (bool) => {
-    updateSetting("soundEnabled", bool);
-  };
-
-  const handlefontSize = (e) => {
-    updateSetting("fontSize", e.target.value);
-  };
-
-  // Handle overlay click to close modal
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleCancel();
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -86,14 +66,15 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
           <h2 className="modal-title">Customization</h2>
           <button
             className="modal-close"
-            id="closeModal"
             aria-label="Close settings"
-            onClick={onClose}
+            onClick={handleCancel}
           >
             ×
           </button>
         </div>
+
         <div className="modal-content">
+          {/* Font Size */}
           <div className="setting-group">
             <label className="setting-label" htmlFor="fontSize">
               Font Size
@@ -104,8 +85,8 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
             <select
               className="setting-select"
               id="fontSize"
-              value={settings.fontSize}
-              onChange={handlefontSize}
+              value={tempSettings.fontSize}
+              onChange={(e) => updateTempSetting("fontSize", e.target.value)}
             >
               {fontSizeOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -115,6 +96,7 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
             </select>
           </div>
 
+          {/* Dataset */}
           <div className="setting-group">
             <label className="setting-label" htmlFor="textDataset">
               Text Dataset
@@ -125,8 +107,8 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
             <select
               className="setting-select"
               id="textDataset"
-              value={settings.textDataset}
-              onChange={handleDatasetChange}
+              value={tempSettings.textDataset}
+              onChange={(e) => updateTempSetting("textDataset", e.target.value)}
             >
               {datasetOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -136,6 +118,7 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
             </select>
           </div>
 
+          {/* Cursor Color */}
           <div className="setting-group">
             <label className="setting-label">Cursor Color</label>
             <div className="setting-description">
@@ -146,16 +129,16 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
                 <div
                   key={color}
                   className={`color-option ${
-                    settings?.cursorColor === color ? "selected" : ""
+                    tempSettings.cursorColor === color ? "selected" : ""
                   }`}
-                  data-color="#3b82f6"
                   style={{ background: color }}
-                  onClick={() => handleColorSelect(color)}
+                  onClick={() => updateTempSetting("cursorColor", color)}
                 ></div>
               ))}
             </div>
           </div>
 
+          {/* Sound Effects */}
           <div className="setting-group">
             <label className="setting-label">Sound Effects</label>
             <div className="setting-description">
@@ -164,34 +147,30 @@ const SettingsModal = ({ isOpen, setIsOpen }) => {
             <div className="checkbox-group">
               <div
                 className={`checkbox ${
-                  settings?.soundEnabled == true ? "checked" : ""
+                  tempSettings.soundEnabled ? "checked" : ""
                 }`}
-                data-setting="sounds"
                 onClick={() =>
-                  settings?.soundEnabled == true
-                    ? handleSoundState(false)
-                    : handleSoundState(true)
+                  updateTempSetting("soundEnabled", !tempSettings.soundEnabled)
                 }
-              >
-                {" "}
-              </div>
+              ></div>
               <label className="checkbox-label">Enable typing sounds</label>
             </div>
           </div>
         </div>
 
+        {/* Actions */}
         <div className="modal-actions">
           <button
             className="btn btn-secondary"
             id="resetSettings"
-            onClick={resetSetting}
+            onClick={handleReset}
           >
             Reset to Default
           </button>
           <button
             className="btn btn-primary"
             id="saveSettings"
-            onClick={onClose}
+            onClick={handleSave}
           >
             Save Changes
           </button>

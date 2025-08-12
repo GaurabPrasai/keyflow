@@ -10,7 +10,7 @@ const DEFAULT_SETTINGS = {
 };
 
 export const SettingsProvider = ({ children }) => {
-  // Current applied settings - initialize from localStorage if available
+  // Load from localStorage or use defaults
   const [settings, setSettings] = useState(() => {
     try {
       const saved = localStorage.getItem("keyflow-settings");
@@ -18,15 +18,15 @@ export const SettingsProvider = ({ children }) => {
         ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) }
         : DEFAULT_SETTINGS;
     } catch (error) {
-      console.log("Failed to load settings from localStorage:", error);
+      console.error("Failed to load settings from localStorage:", error);
       return DEFAULT_SETTINGS;
     }
   });
 
-  // Temporary settings while modal is open (not applied until save)
+  // Temp settings for modal edits
   const [tempSettings, setTempSettings] = useState(settings);
 
-  // Apply CSS custom properties whenever settings change
+  // Apply CSS vars when settings change
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--cursor-color",
@@ -38,12 +38,12 @@ export const SettingsProvider = ({ children }) => {
     );
   }, [settings.cursorColor, settings.fontSize]);
 
-  // Save settings to localStorage whenever settings change
+  // Save to localStorage whenever settings change
   useEffect(() => {
     try {
       localStorage.setItem("keyflow-settings", JSON.stringify(settings));
     } catch (error) {
-      console.log("Failed to save settings to localStorage:", error);
+      console.error("Failed to save settings:", error);
     }
   }, [settings]);
 
@@ -60,14 +60,15 @@ export const SettingsProvider = ({ children }) => {
 
   const resetToDefaults = () => {
     setTempSettings(DEFAULT_SETTINGS);
+    setSettings(DEFAULT_SETTINGS);
   };
 
   const cancelChanges = () => {
-    setTempSettings(settings); // Revert to current saved settings
+    setTempSettings(settings);
   };
 
   const initializeTempSettings = () => {
-    setTempSettings(settings); // Initialize temp settings when modal opens
+    setTempSettings(settings);
   };
 
   return (
@@ -75,7 +76,6 @@ export const SettingsProvider = ({ children }) => {
       value={{
         settings,
         tempSettings,
-        setSettings,
         updateTempSetting,
         saveSettings,
         resetToDefaults,
