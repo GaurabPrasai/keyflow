@@ -6,24 +6,27 @@ import Controls from "./components/Controls";
 import Status from "./components/Status";
 import SettingsModal from "./components/Settings";
 import { SettingsProvider } from "./contexts/SettingsContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { useState } from "react";
 
 function App() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
 
   return (
-    <SettingsProvider>
-      <TextProvider>
-        <Navbar />
-        <div className="container">
-          <Header />
-          <TypingBox />
-          <Controls setIsSettingOpen={setIsSettingOpen} />
-          <Status />
-          <SettingsModal isOpen={isSettingOpen} setIsOpen={setIsSettingOpen} />
-        </div>
-      </TextProvider>
-    </SettingsProvider>
+    <ThemeProvider>
+      <SettingsProvider>
+        <TextProvider>
+          <Navbar />
+          <div className="container">
+            <Header />
+            <TypingBox />
+            <Controls setIsSettingOpen={setIsSettingOpen} />
+            <Status />
+            <SettingsModal isOpen={isSettingOpen} setIsOpen={setIsSettingOpen} />
+          </div>
+        </TextProvider>
+      </SettingsProvider>
+    </ThemeProvider>
   );
 }
 

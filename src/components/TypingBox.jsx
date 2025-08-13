@@ -87,7 +87,7 @@ const TypingBox = () => {
     }
   }, [setCurrentLine]);
 
-  // Debounced scroll function to improve performance
+  // Debounced scroll function
   const debouncedScroll = useCallback(() => {
     let timeoutId;
     return () => {
@@ -134,7 +134,7 @@ const TypingBox = () => {
                     index++;
 
                     // Stop rendering far-ahead bottom characters
-                    if (currentIdx > currentIndex + 200) {
+                    if (currentIdx > currentIndex + 250) {
                       return null;
                     }
                     <span key={`${wordIndex}-${charIndex}`} className="char">

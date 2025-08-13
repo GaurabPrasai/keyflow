@@ -26,7 +26,6 @@ export const SettingsProvider = ({ children }) => {
   // Temp settings for modal edits
   const [tempSettings, setTempSettings] = useState(settings);
 
-  // Apply CSS vars when settings change
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--cursor-color",

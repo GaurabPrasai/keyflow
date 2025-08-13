@@ -11,10 +11,10 @@ const useText = (dataset) => {
   const CHUNK_SIZE = 100;
   const LOAD_THRESHOLD = 0.8; // Load next chunk when 80% through current text
 
-  // Optimized shuffle function with better performance for large arrays
+  // Shuffle function
   const shuffleArray = useCallback((array) => {
     const shuffled = [...array];
-    // Fisher-Yates shuffle algorithm - more efficient for large arrays
+    // Fisher-Yates shuffle algorithm
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];

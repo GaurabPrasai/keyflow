@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Light theme */
+  /* Light theme variables */
   --bg-color: #fafafa;
   --text-color: #2d2d2d;
   --text-muted: #6b7280;
@@ -12,19 +12,45 @@
   --accent-bg: rgba(59, 130, 246, 0.05);
   --border-subtle: #e5e7eb;
   --typing-font-size: 2rem;
-
-  /* Dark theme */
-  --d-bg-color: #0a0a0a;
-  --d-text-color: #e4e4e7;
-  --d-text-muted: #71717a;
-  --d-correct-color: #22c55e;
-  --d-incorrect-color: #ef4444;
-  --d-cursor-color: #60a5fa;
-  --d-icon-color: #71717a;
-  --d-accent-bg: rgba(96, 165, 250, 0.08);
-  --d-border-subtle: #27272a;
 }
 
+/* Dark theme */
+:root.dark {
+  --bg-color: #0a0a0a;
+  --text-color: #e4e4e7;
+  --text-muted: #71717a;
+  --correct-color: #22c55e;
+  --incorrect-color: #ef4444;
+  --cursor-color: #60a5fa;
+  --icon-color: #71717a;
+  --accent-bg: rgba(96, 165, 250, 0.08);
+  --border-subtle: #27272a;
+}
+
+/* Alternative body selectors for immediate effect */
+body[data-theme="light"] {
+  --bg-color: #fafafa;
+  --text-color: #2d2d2d;
+  --text-muted: #6b7280;
+  --correct-color: #10b981;
+  --incorrect-color: #ef4444;
+  --cursor-color: #3b82f6;
+  --icon-color: #6b7280;
+  --accent-bg: rgba(59, 130, 246, 0.05);
+  --border-subtle: #e5e7eb;
+}
+
+body[data-theme="dark"] {
+  --bg-color: #0a0a0a;
+  --text-color: #e4e4e7;
+  --text-muted: #71717a;
+  --correct-color: #22c55e;
+  --incorrect-color: #ef4444;
+  --cursor-color: #60a5fa;
+  --icon-color: #71717a;
+  --accent-bg: rgba(96, 165, 250, 0.08);
+  --border-subtle: #27272a;
+}
 
 * {
   margin: 0;
@@ -38,9 +64,13 @@ body {
   color: var(--text-color);
   min-height: 100vh;
   padding: 37px 20px;
-  transition: all 0.4s ease;
   line-height: 1.6;
 }
+
+* {
+  transition: var(--bg-color) 0.4s ease, var(--text-color) 0.4s ease, var(--border-subtle) 0.4s ease var(--accent-bg) 0.4s ease;
+}
+
 
 .container {
   max-width: 955px;
@@ -507,10 +537,4 @@ body {
     transform: translateZ(0);
     /* Force hardware acceleration */
   }
-}
-
-/* Smooth theme transition */
-* {
-  transition: background-color 0.4s ease, color 0.4s ease,
-    border-color 0.4s ease;
 }
