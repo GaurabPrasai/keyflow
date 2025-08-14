@@ -2,16 +2,16 @@ const Stats = () => {
   return (
     <div className="stats">
       <div className="stat">
-        <div className="stat-icon">⚡</div>
-        <span className="stat-value">56</span>
+        <div className="stat-label">WPM</div>
+        <div className="stat-value">56</div>
       </div>
       <div className="stat">
-        <div className="stat-icon">🎯</div>
-        <span className="stat-value">76%</span>
+        <div className="stat-label">Accuracy</div>
+        <div className="stat-value">97%</div>
       </div>
       <div className="stat">
-        <div className="stat-icon">⏱️</div>
-        <span className="stat-value">60</span>
+        <div className="stat-label">Time</div>
+        <div className="stat-value">60s</div>
       </div>
     </div>
   )

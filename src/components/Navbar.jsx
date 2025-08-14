@@ -4,16 +4,27 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <>
-      <button
-        className="theme-toggle"
-        id="themeToggle"
-        aria-label="Toggle theme"
-        onClick={toggleTheme}
-      >
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
-    </>
+    <nav className="navbar">
+      <div className="navbar-content">
+        <div className="auth-section">
+          <button className="sign-up-btn">Sign Up</button>
+        </div>
+        
+        <button
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+        >
+          <div className="toggle-track">
+            <div className={`toggle-thumb ${theme}`}>
+              <span className="toggle-icon">
+                {theme === "light" ? "🌙" : "☀️"}
+              </span>
+            </div>
+          </div>
+        </button>
+      </div>
+    </nav>
   );
 };
 
