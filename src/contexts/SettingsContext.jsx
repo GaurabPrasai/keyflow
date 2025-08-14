@@ -26,16 +26,11 @@ export const SettingsProvider = ({ children }) => {
   // Temp settings for modal edits
   const [tempSettings, setTempSettings] = useState(settings);
 
-  useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--cursor-color",
-      settings.cursorColor
-    );
-    document.documentElement.style.setProperty(
-      "--typing-font-size",
-      settings.fontSize
-    );
-  }, [settings.cursorColor, settings.fontSize]);
+useEffect(() => {
+  document.body.style.setProperty("--cursor-color", settings.cursorColor);
+  document.body.style.setProperty("--typing-font-size", settings.fontSize);
+}, [settings.cursorColor, settings.fontSize]);
+
 
   // Save to localStorage whenever settings change
   useEffect(() => {
