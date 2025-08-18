@@ -1,5 +1,7 @@
 import { useEffect, useState, useContext, useMemo, useRef } from "react";
 import { SettingsContext } from "../contexts/SettingsContext";
+import clickSound from '../assets/sounds/click_sound.wav';
+import errorSound from '../assets/sounds/error_sound.wav';
 
 const useTyping = (targetText, checkAndLoadNext) => {
     const { settings } = useContext(SettingsContext);
@@ -12,8 +14,8 @@ const useTyping = (targetText, checkAndLoadNext) => {
 
     // Create audio objects only once using useMemo
     const audioSounds = useMemo(() => ({
-        correct: new Audio('src/assets/sounds/click_sound.wav'),
-        incorrect: new Audio('src/assets/sounds/error_sound.wav')
+        correct: new Audio(clickSound),
+        incorrect: new Audio(errorSound)
     }), []);
 
     // Process words whenever target text changes
