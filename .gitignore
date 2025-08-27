@@ -1,0 +1,22 @@
+@"
+# Backend (Python/Django)
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/db.sqlite3
+backend/.env
+
+# Frontend (React/Node.js)
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+
+# General
+.DS_Store
+.vscode/
+"@ | Out-File -FilePath .gitignore -Encoding utf8
