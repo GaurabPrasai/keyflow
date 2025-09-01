@@ -1,4 +1,5 @@
 import TextProvider from "./contexts/TextDataContext";
+import { AuthProvider } from "./hooks/useAuth";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import TypingBox from "./components/TypingBox";
@@ -15,16 +16,18 @@ function App() {
   return (
     <ThemeProvider>
       <SettingsProvider>
-        <TextProvider>
-          <Navbar />
-          <div className="container">
-            <Header />
-            <TypingBox />
-            <Controls setIsSettingOpen={setIsSettingOpen} />
-            <Status />
-            <SettingsModal isOpen={isSettingOpen} setIsOpen={setIsSettingOpen} />
-          </div>
-        </TextProvider>
+        <AuthProvider> 
+          <TextProvider>
+            <Navbar /> 
+            <div className="container">
+              <Header />
+              <TypingBox />
+              <Controls setIsSettingOpen={setIsSettingOpen} />
+              <Status />
+              <SettingsModal isOpen={isSettingOpen} setIsOpen={setIsSettingOpen} />
+            </div>
+          </TextProvider>
+        </AuthProvider>
       </SettingsProvider>
     </ThemeProvider>
   );
