@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL + '/api' || 'http://localhost:8000/api';
+const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:8000") + "/api";
 
 // Configure axios defaults
 axios.defaults.withCredentials = true; // For Django sessions
