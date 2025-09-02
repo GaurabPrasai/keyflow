@@ -15,7 +15,10 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "insecure-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 
 # ALLOWED HOSTS
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1,keyflow-backend.onrender.com"
+).split(",")
 
 # Apps
 INSTALLED_APPS = [
