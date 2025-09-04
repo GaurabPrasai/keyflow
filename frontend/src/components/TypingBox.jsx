@@ -180,11 +180,7 @@ const TypingBox = () => {
       </div>
 
       <div className="progress-indicator">
-        <div
-          className="progress-bar"
-          id="progressBar"
-          style={{ width: `${progress || 0}%` }}
-        ></div>
+        <div className="progress-bar" id="progressBar"></div>
       </div>
     </div>
   );
