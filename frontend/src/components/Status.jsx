@@ -10,7 +10,7 @@ const Status = () => {
     } else if (isTyping) {
       return "Typing...";
     } else {
-      return "Good job! Click to continue or refresh for new text";
+      return "Click to continue or refresh for new text";
     }
   };
 

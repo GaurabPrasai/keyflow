@@ -44,6 +44,9 @@ const TypingBox = () => {
     const charTop = charRect.top;
     const charBottom = charRect.bottom;
 
+    // Calculate the center of the container
+    // const containerCenter = containerTop + containerHeight / 2;
+
     // Check if character is outside the visible area or too close to edges
     const buffer = 40; // Buffer zone from top/bottom edges
     const shouldScroll =
@@ -60,22 +63,22 @@ const TypingBox = () => {
       // Get current transform value
       const currentTransform = textDisplay.style.transform;
       const currentTranslateY = currentTransform.match(
-        /translateY\((-?\d*\.?\d+)rem\)/
+        /translateY$$(-?\d*\.?\d+)rem$$/
       )
-        ? parseFloat(
-            currentTransform.match(/translateY\((-?\d*\.?\d+)rem\)/)[1]
+        ? Number.parseFloat(
+            currentTransform.match(/translateY$$(-?\d*\.?\d+)rem$$/)[1]
           )
         : 0;
 
       // Convert pixels to rem
-      const remSize = parseFloat(
+      const remSize = Number.parseFloat(
         getComputedStyle(document.documentElement).fontSize
       );
       const newTranslateY = currentTranslateY - desiredScrollTop / remSize;
 
-      // Apply smooth transform
       textDisplay.style.transform = `translateY(${newTranslateY}rem)`;
 
+      // Update current line for reference
       const lineHeight = 1.8; // rem
       const newLine = Math.max(
         0,
@@ -91,12 +94,12 @@ const TypingBox = () => {
       document.body.className = "typing-focus"; // or 'typing-focus-shimmer'
       setIsInFocusMode(true);
     }
-    
+
     // Clear existing timer
     if (typingTimerRef.current) {
       clearTimeout(typingTimerRef.current);
     }
-    
+
     // Set new timer
     typingTimerRef.current = setTimeout(() => {
       document.body.className = "typing-unfocus";
@@ -108,10 +111,13 @@ const TypingBox = () => {
   }, [isInFocusMode]);
 
   // Enhanced input change handler
-  const handleEnhancedInputChange = useCallback((e) => {
-    handleInputChange(e); // Call original handler
-    handleTypingStart(); // Trigger focus mode
-  }, [handleInputChange, handleTypingStart]);
+  const handleEnhancedInputChange = useCallback(
+    (e) => {
+      handleInputChange(e); // Call original handler
+      handleTypingStart(); // Trigger focus mode
+    },
+    [handleInputChange, handleTypingStart]
+  );
 
   // Debounced scroll function
   const debouncedScroll = useCallback(() => {
@@ -133,6 +139,7 @@ const TypingBox = () => {
     if (currentIndex === 0 && textDisplayRef.current) {
       textDisplayRef.current.style.transform = "translateY(0rem)";
       setCurrentLine(0);
+
       // Reset focus mode when test resets
       if (isInFocusMode) {
         document.body.className = "";
@@ -182,6 +189,9 @@ const TypingBox = () => {
                     if (currentIdx > currentIndex + 250) {
                       return null;
                     }
+                    <span key={`${wordIndex}-${charIndex}`} className="char">
+                      {char === " " ? "\u00A0" : char}
+                    </span>;
 
                     return (
                       <span
@@ -222,10 +232,7 @@ const TypingBox = () => {
       </div>
 
       <div className="progress-indicator">
-        <div
-          className="progress-bar"
-          id="progressBar"
-        ></div>
+        <div className="progress-bar" id="progressBar"></div>
       </div>
     </div>
   );

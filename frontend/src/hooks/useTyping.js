@@ -12,7 +12,7 @@ const useTyping = (targetText, checkAndLoadNext) => {
     const [processedWords, setProcessedWords] = useState([]);
     const [progress, setProgress] = useState(0);
 
-    // Create audio objects only once using useMemo
+    // Create audio objects only once
     const audioSounds = useMemo(() => ({
         correct: new Audio(clickSound),
         incorrect: new Audio(errorSound)

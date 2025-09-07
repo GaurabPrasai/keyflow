@@ -4,7 +4,6 @@ import { TextDataContext } from '../contexts/TextDataContext';
 const Stats = () => {
   const [wpm, setWpm] = useState(0);
   
-  // Using refs to avoid unnecessary re-renders
   const startTimeRef = useRef(null);
   const updateIntervalRef = useRef(null);
   const lastInputLengthRef = useRef(0);
@@ -12,7 +11,7 @@ const Stats = () => {
   // Get typing data from context
   const typingData = useContext(TextDataContext);
   
-  // Handle case where context is not available
+  // If context is not available
   if (!typingData) {
     console.warn('Stats component: TextDataContext not found');
     return null;
@@ -20,7 +19,7 @@ const Stats = () => {
 
   const { isTyping, inputValue, targetText } = typingData;
 
-  // Optimized WPM calculation
+  // WPM calculation
   const calculateWPM = useCallback(() => {
     if (!startTimeRef.current || !inputValue || inputValue.length === 0) {
       return 0;
