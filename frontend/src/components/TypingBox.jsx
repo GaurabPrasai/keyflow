@@ -3,10 +3,12 @@ import { TextDataContext } from "../contexts/TextDataContext";
 
 const TypingBox = () => {
   const [currentLine, setCurrentLine] = useState(null);
+  const [isInFocusMode, setIsInFocusMode] = useState(false);
   const typingData = useContext(TextDataContext);
   const currentCharRef = useRef(null);
   const textDisplayRef = useRef(null);
   const typingContainerRef = useRef(null);
+  const typingTimerRef = useRef(null);
 
   const {
     isTyping,
@@ -42,9 +44,6 @@ const TypingBox = () => {
     const charTop = charRect.top;
     const charBottom = charRect.bottom;
 
-    // Calculate the center of the container
-    // const containerCenter = containerTop + containerHeight / 2;
-
     // Check if character is outside the visible area or too close to edges
     const buffer = 40; // Buffer zone from top/bottom edges
     const shouldScroll =
@@ -61,15 +60,15 @@ const TypingBox = () => {
       // Get current transform value
       const currentTransform = textDisplay.style.transform;
       const currentTranslateY = currentTransform.match(
-        /translateY$$(-?\d*\.?\d+)rem$$/
+        /translateY\((-?\d*\.?\d+)rem\)/
       )
-        ? Number.parseFloat(
-            currentTransform.match(/translateY$$(-?\d*\.?\d+)rem$$/)[1]
+        ? parseFloat(
+            currentTransform.match(/translateY\((-?\d*\.?\d+)rem\)/)[1]
           )
         : 0;
 
       // Convert pixels to rem
-      const remSize = Number.parseFloat(
+      const remSize = parseFloat(
         getComputedStyle(document.documentElement).fontSize
       );
       const newTranslateY = currentTranslateY - desiredScrollTop / remSize;
@@ -77,7 +76,6 @@ const TypingBox = () => {
       // Apply smooth transform
       textDisplay.style.transform = `translateY(${newTranslateY}rem)`;
 
-      // Update current line for reference
       const lineHeight = 1.8; // rem
       const newLine = Math.max(
         0,
@@ -86,6 +84,34 @@ const TypingBox = () => {
       setCurrentLine(newLine);
     }
   }, [setCurrentLine]);
+
+  // Focus mode handler
+  const handleTypingStart = useCallback(() => {
+    if (!isInFocusMode) {
+      document.body.className = "typing-focus"; // or 'typing-focus-shimmer'
+      setIsInFocusMode(true);
+    }
+    
+    // Clear existing timer
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+    }
+    
+    // Set new timer
+    typingTimerRef.current = setTimeout(() => {
+      document.body.className = "typing-unfocus";
+      setTimeout(() => {
+        document.body.className = "";
+        setIsInFocusMode(false);
+      }, 800); // Match transition duration
+    }, 5000);
+  }, [isInFocusMode]);
+
+  // Enhanced input change handler
+  const handleEnhancedInputChange = useCallback((e) => {
+    handleInputChange(e); // Call original handler
+    handleTypingStart(); // Trigger focus mode
+  }, [handleInputChange, handleTypingStart]);
 
   // Debounced scroll function
   const debouncedScroll = useCallback(() => {
@@ -107,8 +133,27 @@ const TypingBox = () => {
     if (currentIndex === 0 && textDisplayRef.current) {
       textDisplayRef.current.style.transform = "translateY(0rem)";
       setCurrentLine(0);
+      // Reset focus mode when test resets
+      if (isInFocusMode) {
+        document.body.className = "";
+        setIsInFocusMode(false);
+        if (typingTimerRef.current) {
+          clearTimeout(typingTimerRef.current);
+        }
+      }
     }
-  }, [currentIndex, setCurrentLine]);
+  }, [currentIndex, setCurrentLine, isInFocusMode]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimerRef.current) {
+        clearTimeout(typingTimerRef.current);
+      }
+      // Clean up body class on unmount
+      document.body.className = "";
+    };
+  }, []);
 
   return (
     <div className="typing-wrapper">
@@ -137,9 +182,6 @@ const TypingBox = () => {
                     if (currentIdx > currentIndex + 250) {
                       return null;
                     }
-                    <span key={`${wordIndex}-${charIndex}`} className="char">
-                      {char === " " ? "\u00A0" : char}
-                    </span>;
 
                     return (
                       <span
@@ -168,7 +210,7 @@ const TypingBox = () => {
           type="text"
           className="input-field"
           id="inputField"
-          onChange={handleInputChange}
+          onChange={handleEnhancedInputChange}
           value={inputValue}
           autoComplete="off"
           autoCorrect="off"
@@ -180,7 +222,10 @@ const TypingBox = () => {
       </div>
 
       <div className="progress-indicator">
-        <div className="progress-bar" id="progressBar"></div>
+        <div
+          className="progress-bar"
+          id="progressBar"
+        ></div>
       </div>
     </div>
   );

@@ -15,31 +15,7 @@
 }
 
 /* Dark theme */
-:root.dark {
-  --bg-color: #0a0a0a;
-  --text-color: #e4e4e7;
-  --text-muted: #71717a;
-  --correct-color: #22c55e;
-  --incorrect-color: #ef4444;
-  --cursor-color: #60a5fa;
-  --icon-color: #71717a;
-  --accent-bg: rgba(96, 165, 250, 0.08);
-  --border-subtle: #27272a;
-}
-
-/* Alternative body selectors for immediate effect */
-body[data-theme="light"] {
-  --bg-color: #fafafa;
-  --text-color: #2d2d2d;
-  --text-muted: #6b7280;
-  --correct-color: #10b981;
-  --incorrect-color: #ef4444;
-  --cursor-color: #3b82f6;
-  --icon-color: #6b7280;
-  --accent-bg: rgba(59, 130, 246, 0.05);
-  --border-subtle: #e5e7eb;
-}
-
+:root.dark,
 body[data-theme="dark"] {
   --bg-color: #0a0a0a;
   --text-color: #e4e4e7;
@@ -52,6 +28,19 @@ body[data-theme="dark"] {
   --border-subtle: #27272a;
 }
 
+/* Light theme explicit */
+body[data-theme="light"] {
+  --bg-color: #fafafa;
+  --text-color: #2d2d2d;
+  --text-muted: #6b7280;
+  --correct-color: #10b981;
+  --incorrect-color: #ef4444;
+  --cursor-color: #3b82f6;
+  --icon-color: #6b7280;
+  --accent-bg: rgba(59, 130, 246, 0.05);
+  --border-subtle: #e5e7eb;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -62,23 +51,16 @@ body {
   font-family: "JetBrains Mono", "Courier New", monospace;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transform-origin: center top;
   min-height: calc(100vh / 1.1);
   padding: 37px 20px;
   line-height: 1.6;
 }
-
-* {
-  transition: var(--bg-color) 0.4s ease, var(--text-color) 0.4s ease, var(--border-subtle) 0.4s ease var(--accent-bg) 0.4s ease;
-}
-
 
 .container {
   max-width: 955px;
   width: 100%;
   position: relative;
   margin: 0 auto;
-  padding-top: 0;
 }
 
 .header {
@@ -89,12 +71,57 @@ body {
 .title {
   font-size: 1.5rem;
   font-weight: 300;
-  margin-bottom: 41px;
+  margin-bottom: 20px;
   letter-spacing: 0.1em;
   opacity: 0.8;
 }
 
-/* Add these styles to your existing index.css */
+/* Single WPM stat - centered and prominent */
+.stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 15px 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.3s ease;
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: color 0.3s ease;
+}
+
+.stat-value {
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: var(--cursor-color);
+  transition: all 0.3s ease;
+  line-height: 1;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.stat:hover .stat-label {
+  color: var(--cursor-color);
+}
+
+.stat:hover .stat-value {
+  transform: scale(1.05);
+}
 
 /* Navbar styles */
 .navbar {
@@ -107,32 +134,233 @@ body {
   background: transparent;
 }
 
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-left {
+  flex: 1;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .auth-section {
   display: flex;
   gap: 15px;
   align-items: center;
 }
 
-.sign-up-btn {
-  background: var(--cursor-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
+/* My Account Button */
+.my-account-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  padding: 10px;
+  border-radius: 12px;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   font-family: inherit;
+  overflow: hidden;
+  width: 40px;
 }
 
-.sign-up-btn:hover {
-  background: var(--cursor-color);
-  opacity: 0.9;
+.my-account-btn:hover {
+  border-color: var(--cursor-color);
+  background: rgba(255, 255, 255, 0.1);
+  width: auto;
+  padding: 10px 16px;
+}
+
+.account-icon {
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+
+.my-account-btn:hover .account-icon {
+  opacity: 1;
+}
+
+.account-text {
+  opacity: 0;
+  transition: all 0.4s ease;
+  transform: translateX(-10px);
+  white-space: nowrap;
+  width: 0;
+  overflow: hidden;
+}
+
+.my-account-btn:hover .account-text {
+  opacity: 1;
+  transform: translateX(0);
+  width: auto;
+  margin-left: 8px;
+}
+
+/* User Profile - After Login */
+.user-menu-container {
+  position: relative;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-profile:hover {
+  background: rgba(255, 255, 255, 0.1);
   transform: translateY(-1px);
 }
 
-/* Enhanced theme toggle */
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--cursor-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.dropdown-arrow {
+  transition: transform 0.2s;
+  margin-left: 0.25rem;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* User Menu Dropdown */
+.user-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  width: 240px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.user-menu-header {
+  padding: 1rem;
+  background: var(--accent-bg);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar-small {
+  width: 2rem;
+  height: 2rem;
+  background: var(--cursor-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.user-name-small {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.user-email {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.user-menu-divider {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.user-menu-items {
+  padding: 0.5rem;
+}
+
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.user-menu-item:hover {
+  background: var(--accent-bg);
+}
+
+.user-menu-item.logout-item {
+  color: var(--incorrect-color);
+}
+
+.user-menu-item.logout-item:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.user-menu-item svg {
+  flex-shrink: 0;
+}
+
+/* Theme Toggle */
 .theme-toggle {
   background: var(--accent-bg);
   border: 1px solid var(--border-subtle);
@@ -184,119 +412,6 @@ body {
 .toggle-icon {
   font-size: 14px;
   transition: all 0.3s ease;
-}
-
-/* Add these styles to your existing index.css - Just for the My Account button and modal */
-
-/* Navbar layout updates */
-.navbar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.navbar-left {
-  flex: 1;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-/* My Account Button - Shows only icon by default, expands on hover */
-.my-account-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-color);
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  font-family: inherit;
-  overflow: hidden;
-  width: 40px; /* Initially just icon width */
-}
-
-.my-account-btn:hover {
-  border-color: var(--cursor-color);
-  background: rgba(255, 255, 255, 0.1);
-  width: auto; /* Expand to show text */
-  padding: 10px 16px;
-}
-
-.account-icon {
-  display: flex;
-  align-items: center;
-  opacity: 0.8;
-  transition: opacity 0.9s ease;
-  flex-shrink: 0;
-}
-
-.my-account-btn:hover .account-icon {
-  opacity: 1;
-}
-
-.account-text {
-  opacity: 0;
-  transition: all 0.4s ease;
-  transform: translateX(-10px);
-  white-space: nowrap;
-  width: 0;
-  overflow: hidden;
-}
-
-.my-account-btn:hover .account-text {
-  opacity: 1;
-  transform: translateX(0);
-  width: auto;
-  margin-left: 8px;
-}
-
-/* User Profile - After Login */
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.user-profile:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--cursor-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: white;
-}
-
-.user-name {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-color);
 }
 
 /* Authentication Modal */
@@ -453,6 +568,22 @@ body {
   color: var(--text-muted);
 }
 
+.form-group input.error {
+  border-color: var(--incorrect-color);
+}
+
+.error-message {
+  color: var(--incorrect-color);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+}
+
+.error-message.general-error {
+  text-align: center;
+  margin: 10px 0;
+}
+
 .auth-submit-btn {
   width: 100%;
   padding: 16px;
@@ -468,9 +599,14 @@ body {
 }
 
 .auth-submit-btn:hover {
-  background: var(--cursor-color);
   opacity: 0.9;
   transform: translateY(-2px);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .auth-footer {
@@ -499,164 +635,7 @@ body {
   text-decoration-color: var(--cursor-color);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes slideInTab {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .my-account-btn {
-    padding: 10px 14px;
-    font-size: 0.85rem;
-  }
-
-  .auth-modal {
-    width: 95%;
-    margin: 20px;
-  }
-
-  .auth-content {
-    padding: 24px;
-  }
-
-  .auth-title {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .my-account-btn span {
-    display: none;
-  }
-
-  .user-name {
-    display: none;
-  }
-}
-
-/* Updated stats styles */
-.stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 80px;
-  margin-bottom: 20px;
-  padding: 20px 0;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  min-width: 80px;
-}
-
-.stat:hover {
-  transform: translateY(-2px);
-}
-
-.stat-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: color 0.3s ease;
-}
-
-.stat-value {
-  font-size: 2.5rem;
-  font-weight: 500;
-  color: var(--cursor-color);
-  transition: all 0.3s ease;
-  line-height: 1;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.stat:hover .stat-label {
-  color: var(--cursor-color);
-}
-
-.stat:hover .stat-value {
-  transform: scale(1.05);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 15px 20px;
-  }
-
-  .stats {
-    gap: 50px;
-  }
-
-  .stat-value {
-    font-size: 2rem;
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-  }
-
-  .sign-up-btn {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
-
-  .theme-toggle {
-    width: 55px;
-    height: 30px;
-  }
-
-  .toggle-thumb {
-    width: 24px;
-    height: 24px;
-  }
-
-  .toggle-thumb.dark {
-    left: 27px;
-  }
-
-  body {
-    padding-top: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar-content {
-    padding: 0 10px;
-  }
-
-  .stats {
-    gap: 35px;
-  }
-
-  .stat-value {
-    font-size: 1.8rem;
-  }
-}
-
+/* Typing Components */
 .typing-wrapper {
   position: relative;
   margin-bottom: 50px;
@@ -683,42 +662,12 @@ body {
   scroll-behavior: smooth;
   transition: transform 0.2s ease-out;
   contain: layout style paint;
-  /* Comprehensive containment */
   will-change: transform;
-  /* Hint for GPU acceleration */
   backface-visibility: hidden;
-  /* Prevent flicker during transforms */
   transform-style: preserve-3d;
-  /* Hardware acceleration */
 }
 
-/* Top fade effect */
-.text-display::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(var(--bg-color), transparent);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Bottom fade effect */
-.text-display::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(transparent, var(--bg-color));
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Alternative approach with container-based fading */
+/* Fade effects */
 .typing-container::before {
   content: "";
   position: absolute;
@@ -741,33 +690,6 @@ body {
   background: linear-gradient(transparent 20%, var(--bg-color) 100%);
   pointer-events: none;
   z-index: 10;
-}
-
-/* Mobile responsiveness for fade effects */
-@media (max-width: 768px) {
-
-  .text-display::before,
-  .text-display::after {
-    height: 60px;
-  }
-
-  .typing-container::before,
-  .typing-container::after {
-    height: 50px;
-  }
-}
-
-@media (max-width: 480px) {
-
-  .text-display::before,
-  .text-display::after {
-    height: 50px;
-  }
-
-  .typing-container::before,
-  .typing-container::after {
-    height: 40px;
-  }
 }
 
 .word {
@@ -798,14 +720,6 @@ body {
   animation: cursor-pulse 1.2s ease-in-out infinite;
 }
 
-/* Optimize animations and transitions */
-.char.correct,
-.char.incorrect,
-.char.current {
-  transition: background-color 0.1s ease;
-}
-
-
 @keyframes cursor-pulse {
 
   0%,
@@ -834,17 +748,14 @@ body {
   outline: none;
   color: transparent;
   caret-color: transparent;
-  /* pointer-events: none; */
   z-index: 1;
   contain: layout style;
-  /* Disable expensive text rendering features */
   text-rendering: optimizeSpeed;
   font-smooth: never;
   -webkit-font-smoothing: none;
 }
 
-
-
+/* Controls */
 .controls {
   display: flex;
   justify-content: center;
@@ -881,7 +792,12 @@ body {
   transform: translateY(0);
 }
 
+.control-btn:focus-visible {
+  outline: 2px solid var(--cursor-color);
+  outline-offset: 2px;
+}
 
+/* Progress Bar */
 .progress-indicator {
   position: relative;
   margin-top: 40px;
@@ -898,30 +814,13 @@ body {
   height: 100%;
   background: var(--cursor-color);
   width: 0%;
-  transition: width 0.3s ease;
+  transition: width 0.2s ease-out;
   border-radius: 1px;
   will-change: width;
-  /* Hint for GPU acceleration */
-  transition: width 0.2s ease-out;
   contain: layout style;
 }
 
-/* Mobile responsiveness for progress bar */
-@media (max-width: 768px) {
-  .progress-indicator {
-    width: 150px;
-    bottom: -15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .progress-indicator {
-    width: 120px;
-    height: 2px;
-    bottom: -12px;
-  }
-}
-
+/* Game Status */
 .game-status {
   text-align: center;
   position: relative;
@@ -938,172 +837,47 @@ body {
   opacity: 1;
 }
 
-/* User Menu Styles */
-.user-menu-container {
-  position: relative;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-.user-profile:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+@keyframes slideInTab {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
 }
 
-[data-theme="dark"] .user-profile:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dropdown-arrow {
-  transition: transform 0.2s;
-  margin-left: 0.25rem;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.user-menu-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 0.5rem;
-  width: 240px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  overflow: hidden;
-}
-
-[data-theme="dark"] .user-menu-dropdown {
-  background: #1f2937;
-  border-color: #374151;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-
-.user-menu-header {
-  padding: 1rem;
-  background: #f9fafb;
-}
-
-[data-theme="dark"] .user-menu-header {
-  background: #111827;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.user-avatar-small {
-  width: 2rem;
-  height: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-}
-
-.user-name-small {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #111827;
-}
-
-[data-theme="dark"] .user-name-small {
-  color: #f9fafb;
-}
-
-.user-email {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-[data-theme="dark"] .user-email {
-  color: #9ca3af;
-}
-
-.user-menu-divider {
-  height: 1px;
-  background: #e5e7eb;
-}
-
-[data-theme="dark"] .user-menu-divider {
-  background: #374151;
-}
-
-.user-menu-items {
-  padding: 0.5rem;
-}
-
-.user-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 0.75rem;
-  border: none;
-  background: none;
-  text-align: left;
-  font-size: 0.875rem;
-  color: #374151;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-[data-theme="dark"] .user-menu-item {
-  color: #d1d5db;
-}
-
-.user-menu-item:hover {
-  background: #f3f4f6;
-}
-
-[data-theme="dark"] .user-menu-item:hover {
-  background: #374151;
-}
-
-.user-menu-item.logout-item {
-  color: #ef4444;
-}
-
-.user-menu-item.logout-item:hover {
-  background: #fef2f2;
-}
-
-[data-theme="dark"] .user-menu-item.logout-item:hover {
-  background: rgba(239, 68, 68, 0.1);
-}
-
-.user-menu-item svg {
-  flex-shrink: 0;
-}
-
-/* Mobile responsiveness */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   body {
     padding: 30px 15px;
+  }
+
+  .navbar {
+    padding: 15px 20px;
   }
 
   .container {
@@ -1112,20 +886,15 @@ body {
 
   .title {
     font-size: 1.3rem;
-    margin-bottom: 30px;
-  }
-
-  .stats {
-    gap: 40px;
     margin-bottom: 15px;
   }
 
-  .stat-icon {
-    font-size: 1.3rem;
+  .stat-value {
+    font-size: 2.8rem;
   }
 
-  .stat-value {
-    font-size: 1.5rem;
+  .stat-label {
+    font-size: 0.85rem;
   }
 
   .text-display {
@@ -1140,7 +909,7 @@ body {
 
   .controls {
     gap: 25px;
-    bottom: 70px;
+    bottom: 18px;
   }
 
   .control-btn {
@@ -1149,25 +918,60 @@ body {
   }
 
   .theme-toggle {
-    width: 40px;
-    height: 40px;
-    top: 20px;
-    right: 20px;
-    font-size: 1rem;
+    width: 55px;
+    height: 30px;
   }
 
-  .game-status {
-    bottom: 20px;
+  .toggle-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .toggle-thumb.dark {
+    left: 27px;
+  }
+
+  .typing-container::before,
+  .typing-container::after {
+    height: 50px;
+  }
+
+  .progress-indicator {
+    width: 150px;
+  }
+
+  .auth-modal {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .auth-content {
+    padding: 24px;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+  }
+
+  .user-menu-dropdown {
+    width: 220px;
   }
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding-top: 0;
+
+  .my-account-btn .account-text,
+  .user-name {
+    display: none;
   }
 
-  .stats {
-    gap: 30px;
+  .my-account-btn {
+    width: 40px;
+    padding: 10px;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
   }
 
   .text-display {
@@ -1175,35 +979,112 @@ body {
     padding: 25px 0;
   }
 
-  .text-display::after {
-    height: 60px;
-  }
-
   .input-field {
     font-size: 1.4rem;
   }
 
   .controls {
-    bottom: 60px;
-  }
-
-  .game-status {
     bottom: 15px;
+    gap: 20px;
+  }
+
+  .typing-container::before,
+  .typing-container::after {
+    height: 40px;
+  }
+
+  .progress-indicator {
+    width: 120px;
+    height: 2px;
   }
 }
 
-/* Focus states for accessibility */
-.control-btn:focus-visible,
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--cursor-color);
-  outline-offset: 2px;
-}
-
-/* Optimize for large datasets */
+/* Hardware acceleration and performance optimizations */
 @media (min-width: 1024px) {
   .text-display {
-    /* Enable subpixel rendering optimizations on larger screens */
     transform: translateZ(0);
-    /* Force hardware acceleration */
+  }
+}
+
+
+/* Focus Mode - Hide unnecessary elements when typing */
+.typing-focus .navbar,
+.typing-focus .title,
+.typing-focus .controls,
+.typing-focus .game-status,
+.typing-focus .progress-indicator {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Alternative shimmer effect for elements during focus mode */
+.typing-focus-shimmer .navbar,
+.typing-focus-shimmer .title,
+.typing-focus-shimmer .controls,
+.typing-focus-shimmer .game-status,
+.typing-focus-shimmer .progress-indicator {
+  opacity: 0.15;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+
+  50% {
+    opacity: 0.05;
+  }
+}
+
+/* Keep WPM stat visible but subtle during focus */
+.typing-focus .stats,
+.typing-focus-shimmer .stats {
+  opacity: 0.3;
+  transition: opacity 0.6s ease;
+}
+
+/* Enhanced focus on text display */
+.typing-focus .text-display,
+.typing-focus-shimmer .text-display {
+  transform: translateY(-20px) scale(1.02);
+  transition: transform 0.6s ease;
+}
+
+/* Smooth return to normal state */
+.typing-unfocus .navbar,
+.typing-unfocus .title,
+.typing-unfocus .controls,
+.typing-unfocus .game-status,
+.typing-unfocus .progress-indicator,
+.typing-unfocus .stats {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.typing-unfocus .text-display {
+  transition: transform 0.8s ease;
+}
+
+/* Mobile adjustments for focus mode */
+@media (max-width: 768px) {
+
+  .typing-focus .text-display,
+  .typing-focus-shimmer .text-display {
+    transform: translateY(-15px) scale(1.01);
+  }
+}
+
+@media (max-width: 480px) {
+
+  .typing-focus .text-display,
+  .typing-focus-shimmer .text-display {
+    transform: translateY(-10px) scale(1.005);
   }
 }
