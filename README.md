@@ -242,6 +242,6 @@ Open your browser and navigate to `http://localhost:5173`
 
 **Built with ❤️ for CS50 Web Programming with Python and JavaScript**
 
-[⭐ Star this repo](https://github.com/yourusername/keyflow) • [🐛 Report Bug](https://github.com/yourusername/keyflow/issues) • [💡 Request Feature](https://github.com/yourusername/keyflow/issues)
+[⭐ Star this repo](https://github.com/gaurabprasai/keyflow) • [🐛 Report Bug](https://github.com/gaurabprasai/keyflow/issues) • [💡 Request Feature](https://github.com/gaurabprasai/keyflow/issues)
 
 </div>
