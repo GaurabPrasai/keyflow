@@ -1,32 +1,38 @@
-import TextProvider from "./contexts/TextDataContext";
-import { AuthProvider } from "./hooks/useAuth";
-import Navbar from "./components/Navbar";
-import Header from "./components/Header";
-import TypingBox from "./components/TypingBox";
-import Controls from "./components/Controls";
-import Status from "./components/Status";
-import SettingsModal from "./components/Settings";
+import { Suspense, lazy } from "react";
+import Notch from "./components/Notch";
+import TypingTest from "./components/TypingTest";
 import { SettingsProvider } from "./contexts/SettingsContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { useState } from "react";
+import { UIProvider } from "./contexts/UIContext";
+import { AuthProvider } from "./hooks/useAuth";
+import { useRoute } from "./utils/router";
+
+const Reports = lazy(() => import("./components/Reports"));
 
 function App() {
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const path = useRoute();
+  const onReports = path === "/reports";
 
   return (
     <ThemeProvider>
       <SettingsProvider>
-        <AuthProvider> 
-          <TextProvider>
-            <Navbar /> 
-            <div className="container">
-              <Header />
-              <TypingBox />
-              <Controls setIsSettingOpen={setIsSettingOpen} />
-              <Status />
-              <SettingsModal isOpen={isSettingOpen} setIsOpen={setIsSettingOpen} />
-            </div>
-          </TextProvider>
+        <AuthProvider>
+          <UIProvider>
+            <Notch />
+            {onReports ? (
+              <Suspense
+                fallback={
+                  <main className="page-loading" aria-busy="true">
+                    Loading reports…
+                  </main>
+                }
+              >
+                <Reports />
+              </Suspense>
+            ) : (
+              <TypingTest />
+            )}
+          </UIProvider>
         </AuthProvider>
       </SettingsProvider>
     </ThemeProvider>

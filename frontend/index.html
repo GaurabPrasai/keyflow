@@ -2,12 +2,62 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="src/assets/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Keyflow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Keyflow — endless typing</title>
+    <meta
+      name="description"
+      content="A calm, endless typing experience with live WPM, automatic sessions and reports on your speed, accuracy and problem keys."
+    />
+    <meta name="theme-color" content="#2f2a20" id="theme-color" />
+    <meta property="og:title" content="Keyflow — endless typing" />
+    <meta
+      property="og:description"
+      content="A calm, endless typing experience with live WPM, automatic sessions and reports."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href="/fonts/jetbrains-mono-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    <script>
+      (function () {
+        var THEMES = ["ember", "midnight", "moss", "plum", "paper", "mist"];
+        var LEGACY = { dark: "midnight", light: "paper" };
+        var theme = "ember";
+        try {
+          var stored = localStorage.getItem("keyflow-theme");
+          if (stored && THEMES.indexOf(stored) < 0) stored = LEGACY[stored] || null;
+          if (stored && THEMES.indexOf(stored) >= 0) theme = stored;
+        } catch (error) {
+          /* private mode: fall back to Ember */
+        }
+        var root = document.documentElement;
+        root.dataset.theme = theme;
+        root.style.colorScheme = theme === "paper" || theme === "mist" ? "light" : "dark";
+        try {
+          localStorage.setItem("keyflow-theme", theme);
+        } catch (error) {
+          /* ignore */
+        }
+        try {
+          var raw = localStorage.getItem("keyflow-settings");
+          var settings = raw ? JSON.parse(raw) : null;
+          if (settings && isFinite(Number(settings.fontSize))) {
+            root.style.setProperty("--font-scale", String(Number(settings.fontSize)));
+          }
+        } catch (error) {
+          /* ignore */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>Keyflow needs JavaScript enabled to run the typing experience.</noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
