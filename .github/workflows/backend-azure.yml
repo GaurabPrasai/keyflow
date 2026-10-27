@@ -51,6 +51,11 @@ jobs:
           zip -r "$GITHUB_WORKSPACE/backend.zip" . \
             -x "*.sqlite3" "*/__pycache__/*" "__pycache__/*" "*.pyc" "venv/*" ".venv/*"
 
+      - name: Azure Login
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
