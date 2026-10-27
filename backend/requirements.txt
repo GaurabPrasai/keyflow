@@ -1,6 +1,7 @@
-django
-django-cors-headers
-psycopg2-binary
-gunicorn
-whitenoise
-dj-database-url
+Django>=5.1,<5.3
+django-cors-headers>=4.4,<5
+psycopg2-binary>=2.9,<3
+gunicorn>=23,<24
+whitenoise>=6.7,<7
+dj-database-url>=2.2,<3
+python-dotenv>=1.0,<2
