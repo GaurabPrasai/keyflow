@@ -1,102 +1,135 @@
-
 # Keyflow
 
-_A modern, minimalistic typing practice application built for typing enthusiast_
+A calm, endless typing experience. No timer, no end screen — a stream of words
+fades in and out while you type, and every session is measured quietly in the
+background.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=for-the-badge)](https://keyflow-bay.vercel.app/)
+Live: [keyflow-bay.vercel.app](https://keyflow-bay.vercel.app/)
 
-----------
+## What it does
 
-## Distinctiveness & Complexity
+- **Endless typing.** Words are appended from a shuffle bag as you go; the text
+  scrolls one line at a time behind a fixed mask, and the active line always
+  sits in the second slot. The word list rebases every ~300 words, so the DOM
+  stays bounded for runs of any length.
+- **Three-tone text.** Upcoming words in the secondary colour, the current word
+  in primary, typed text in tertiary, mistakes in the error colour with a soft
+  glow. JetBrains Mono, no ligatures.
+- **The notch.** A toolbar glued to the top edge — concave shoulders blending
+  it into the screen, the `KEYFLOW` wordmark and five panels — text source,
+  themes, sound, reports, account. It slides up out of the way while you type
+  (stats take its place) and comes back on mouse move, `Esc`, or after 2.5 s
+  without keys.
+- **Live stats.** Rolling 10-second WPM and accuracy, digits rolling vertically,
+  written straight to the DOM four times a second — no React render per tick.
+- **Six themes** (Ember, Midnight, Moss, Plum, Paper, Mist), applied before the
+  first paint and cross-faded with the View Transitions API.
+- **Sound with zero assets.** Soft/Clicky/Thock packs are synthesised in Web
+  Audio on the first keystroke — filtered noise plus a decaying sine.
+- **Automatic sessions.** A session closes after 10 s idle, on restart, on a
+  dataset change or when the tab is hidden. Guests keep them in IndexedDB;
+  signed-in users also sync them to Postgres.
+- **Reports** (`/reports`) — averages, best speed, accuracy, consistency, day
+  streak, a WPM/accuracy chart, the sessions table with per-second detail, top
+  5 problem keys, slowest keys, and JSON export or one-click deletion.
+- **Guest-first accounts.** Username + password, inside the notch (no modal).
+  Local sessions upload automatically after sign-in and merge by id.
 
-Keyflow is designed as a typing practice application centered on real-time performance and interactivity. This focus on continuous user input, instant validation, and live statistics makes it unique within the course context.
+Keyboard: `Tab` / `Shift+Enter` new text · `Enter` restart · `Backspace` ·
+`Ctrl/Alt+Backspace` erase a word · `Esc` bring the toolbar back.
 
-In terms of complexity, Keyflow is challenging because of how much happens in real time. Every keystroke from the user is captured, validated, and used to update typing statistics instantly. This required careful use of **React state management**, including Context API and custom hooks, to share data across components efficiently. For example, when the user types a character, the app needs to immediately check if it’s correct, update the cursor, recalculate accuracy and WPM, and re-render the stats on the screen.
+## Stack
 
-Although the frontend (React) holds most of the logic, the **Django backend** is still important. It manages data, provides API endpoints, and handles authentication. Having to integrate React with Django also added to the complexity, since I had to make the two work together smoothly.
+- **Frontend** — React 19 + Vite 7, hand-written CSS, no UI, chart or animation
+  library. `/reports` and the account panel are lazy chunks; keystrokes never
+  cause a React render.
+- **Backend** — Django 5, session auth with CSRF, Django ORM. SQLite locally,
+  Postgres in production.
+- **Hosting** — SPA on Vercel, API on Azure App Service, `/api` rewritten
+  through Vercel so the browser sees a single origin and cookies stay
+  first-party. See [DEPLOY.md](DEPLOY.md).
 
-Some of the features that made the project complex:
+## Local development
 
--   Real-time WPM and accuracy calculation
-    
--   Multiple text datasets with chunk loading
-    
--   Settings panel for customizing font size, sounds, and colors
-    
--   Responsive design for both desktop and mobile
-    
+Requires Node 20+ and Python 3.11+.
 
-Altogether, this project proved more challenging than previous ones, as it pushed me beyond my existing skills and required learning many new concepts. The most valuable insight I got is that how the software development lifecycle works, from planning and architecture to implementation and testing, It provide me a practical understanding of how complex applications are built in the real world.
-
-----------
-
-## Getting Started
-
-### Prerequisites
-
--   **Node.js** (v16 or higher)
--   **Python** (v3.8 or higher)
--   **pip** (Python package manager)
-
-#### 1. Clone the Repository
+One command from the repo root starts both servers (creates the venv, installs
+dependencies, migrates, then runs Django on `:8000` and Vite on `:5173`;
+`Ctrl+C` stops both):
 
 ```bash
-git clone https://github.com/gaurabprasai/keyflow.git
-cd keyflow
-
+./startup.sh
 ```
 
-#### 2. Backend Setup
+`./startup.sh backend` or `./startup.sh frontend` runs just one side. The
+manual steps below are what the script does for you.
+
+### Backend
 
 ```bash
 cd backend
+python -m venv venv
+# Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
 python manage.py migrate
 python manage.py runserver
-
 ```
 
-_Backend will be available at `http://localhost:8000`_
+API: `http://localhost:8000`. The example `.env` uses `DJANGO_DEBUG=True` and a
+throwaway secret — never use those in production.
 
-#### 3. Frontend Setup
+### Frontend
 
 ```bash
 cd frontend
 npm install
 npm run dev
-
 ```
 
-_Frontend will be available at `http://localhost:5173`_
+Open `http://localhost:5173`. Vite proxies `/api` to Django, so no environment
+variables are needed. Leave `VITE_API_BASE_URL` empty if you create
+`frontend/.env.local`.
 
-#### 4. Access the Application
+## Checks
 
-Open your browser and navigate to `http://localhost:5173`
+```bash
+cd frontend
+npm run test:metrics   # pure metrics formulas
+npm run lint
+npm run build
 
-----------
+cd ../backend
+python manage.py check
+python manage.py test
+```
 
-## Contributing
+### Perf harness
 
-1.  Fork the repository
-2.  Create a feature branch (`git checkout -b feature/amazing-feature`)
-3.  Commit your changes (`git commit -m 'Add amazing feature'`)
-4.  Push to the branch (`git push origin feature/amazing-feature`)
-5.  Open a Pull Request
+`npm run perf` drives headless Chrome against the production preview build at
+`http://localhost:4173/?perf` (it starts `vite preview` for you): 300 synthetic
+keystrokes at 12 ms intervals, reporting per-key handler time, frame gaps and
+long tasks. With the **Flow glow** toggle switched on first, it also runs
+alternating passes with the glow forced on and off so the two can be compared.
+`PERF_ENDLESS=1` adds a 1400-key endless run that proves the rebase keeps the
+DOM bounded; `PERF_GPU=1` asks Chrome for its GPU path.
 
-----------
+## Layout
 
-## Acknowledgments
-
--   **CS50 Web Programming Course** - For the foundational knowledge
--   **Harvard University** - For the excellent curriculum
--   **Open Source Community** - For the amazing tools and libraries
-
-----------
-
-<div align="center">
-
-**Built with ❤️ for CS50 Web Programming with Python and JavaScript**
-
-[⭐ Star this repo](https://github.com/gaurabprasai/keyflow) • [🐛 Report Bug](https://github.com/gaurabprasai/keyflow/issues) • [💡 Request Feature](https://github.com/gaurabprasai/keyflow/issues)
-
-</div>
+```
+backend/
+  keyflow/           models (User, TypingSession), API views, tests
+  backend/           settings, URLs, WSGI, no-store middleware
+  startup.sh         App Service: migrate, collectstatic, gunicorn
+frontend/
+  src/components/    TypingTest, Notch (panels), AccountPanel, Reports, Icons
+  src/hooks/         useTypingTest (engine), useAuth, useTypingSound
+  src/contexts/      themes, settings, open-panel state
+  src/utils/         metrics, session recorder, storage, sync, router, layout,
+                     rolling numbers, view transitions, perf harness
+  src/styles/        index.css, reports.css
+  scripts/           metrics tests, headless perf driver
+infra/azure-setup.sh Azure resource + app setting setup
+.github/workflows/   CI and backend deployment
+```
